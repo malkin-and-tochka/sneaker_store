@@ -8,6 +8,9 @@ import RegisterForm from "./RegisterForm";
 
 const CombineForm = () => {
     const [loginOrRegister, setLoginOrRegister] = useState('login')
+    // useEffect(() => {
+    //     get
+    // }, []);
     return (
         <View style={styles.highWrapper}>
             <View style={styles.loginFormWrapper}>

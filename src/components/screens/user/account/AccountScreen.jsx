@@ -12,6 +12,7 @@ import {getAccountData, getAccountRoles, updateAccountData} from "../../../../ap
 import CustomButton from "../../../reused/CustomButton";
 import {useNavigation} from "@react-navigation/native";
 import {getOrders} from "../../../../api/orderApi";
+import FormElement from "../admin/FormElement";
 
 const AccountScreen = () => {
     useEffect(() => {
@@ -68,39 +69,60 @@ const AccountScreen = () => {
 
     return (
         <View style={styles.container}>
-            {editMode ? (
-                <>
-                    <TextInput value={newInfo.firstName} placeholder={'Your first name'} onChangeText={handleFirstNameChange}/>
-                    <TextInput value={newInfo.lastName} placeholder={'Your last name'} onChangeText={handleLastNameChange}/>
-                    <TextInput value={newInfo.email} placeholder={'Your email'} onChangeText={handleEmailChange}/>
-                    <TextInput value={newInfo.mobilePhone} placeholder={'Your mobile phone'} onChangeText={handleMobilePhoneChange}/>
-                    <CustomButton handle={handleSave} buttonText={"Сохранить"} fill={true} propStyles={{height: 40}}/>
-                </>
-            ) : (
-                <>
-                    <Text style={styles.textInfo}>First name:  {accountInfo.firstName}</Text>
-                    <Text style={styles.textInfo}>Last name:  {accountInfo.lastName}</Text>
-                    <Text style={styles.textInfo}>Email:  {accountInfo.email}</Text>
-                    <Text style={styles.textInfo}>Mobile phone:  {accountInfo.mobilePhone ? accountInfo.mobilePhone : 'Empty'}</Text>
-                    <CustomButton handle={handleEdit} buttonText={"Изменить"} fill={true} propStyles={{height: 40}}/>
-                </>
-            )}
-            {isAdmin && <CustomButton buttonText={'Admin page'} fill={true} handle={()=>navigation.navigate('Admin')}/>}
+            <View style={styles.wrapper}>
+                {editMode ? (
+                    <>
+                        <FormElement textStyles={styles.text} handle={text => handleFirstNameChange(text)} value={newInfo.firstName} title={'Your first name'}
+                                     label={'Your first name'}/>
+                        <FormElement textStyles={styles.text} handle={text => handleLastNameChange(text)} value={newInfo.lastName} title={'Your last name'}
+                                     label={'Your last name'}/>
+                        <FormElement textStyles={styles.text} handle={text => handleEmailChange(text)} value={newInfo.email} title={'Your email'}
+                                     label={'Your email'}/>
+                        <FormElement textStyles={styles.text} handle={text => handleMobilePhoneChange(text)} value={newInfo.mobilePhone} title={'Your mobile phone'}
+                                     label={'Your mobile phone'}/>
+                        <CustomButton handle={handleSave} buttonText={"Save"} fill={true} propStyles={{height: 40}}/>
+                    </>
+                ) : (
+                    <>
+                        <Text style={styles.textInfo}>First name:  {accountInfo.firstName}</Text>
+                        <Text style={styles.textInfo}>Last name:  {accountInfo.lastName}</Text>
+                        <Text style={styles.textInfo}>Email:  {accountInfo.email}</Text>
+                        <Text style={styles.textInfo}>Mobile phone:  {accountInfo.mobilePhone ? accountInfo.mobilePhone : 'Empty'}</Text>
+                        <CustomButton handle={handleEdit} buttonText={"Change"} fill={true} propStyles={{height: 40}}/>
+                    </>
+                )}
+                {isAdmin && <CustomButton buttonText={'Admin page'} fill={true} handle={()=>navigation.navigate('Admin')}/>}
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    wrapper: {
+        backgroundColor: '#5552FF',
+        gap: 10,
+        padding: 10,
+        marginBottom: 20,
+        borderRadius: 10,
+        width: '90%'
+    },
     container: {
         flex: 1,
-        flexDirection: "column",
-        gap: 10,
-        padding: 10
+        alignItems: "center",
+        marginTop: 20
     },
     textInfo: {
         fontSize: 20,
         fontWeight: '500',
-    }
+        color: '#fff'
+    },
+    text: {
+        fontSize: 20,
+        fontWeight: '500',
+        color: '#fff',
+        textAlign: "left",
+        width: '90%'
+    },
 })
 
 export default AccountScreen

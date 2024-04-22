@@ -17,7 +17,7 @@ const PageSizeSelector = () => {
     return (
         <View>
             <Pressable style={styles.button} onPress={() => setMenuVisible(prevState => !prevState)}>
-                <Text style={styles.textButton}>Select page size</Text>
+                <Text style={styles.textButton}>Page size</Text>
             </Pressable>
             {menuVisible && <View style={styles.menu}>
                 {options.map(el => <TouchableOpacity
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#100F14',
-        width: 160,
+        width: 100,
         alignItems: "center",
         justifyContent: "center",
         height: 40,

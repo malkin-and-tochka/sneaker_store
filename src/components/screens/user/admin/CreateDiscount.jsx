@@ -28,9 +28,9 @@ const CreateDiscount = () => {
     return (
         <View style={styles.inputsWrapper}>
             <Text style={styles.title}>Create discount</Text>
-            <FormElement handle={(text) => setDiscountName(text)} value={discountName} title={'Discount name'}
+            <FormElement textStyles={styles.text} handle={(text) => setDiscountName(text)} value={discountName} title={'Discount name'}
                          label={'Discount name'}/>
-            <FormElement handle={(text) => setDiscountPrice(text)} value={discountPrice}
+            <FormElement textStyles={styles.text} handle={(text) => setDiscountPrice(text)} value={discountPrice}
                          title={'Discount price'} label={'Discount price'}/>
             {validator && <Text style={styles.error}>Please, check the valid values of the fields</Text>}
             <View style={styles.row}>
@@ -45,12 +45,13 @@ const CreateDiscount = () => {
 
 const styles = StyleSheet.create({
     inputsWrapper: {
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#5552FF',
         // flexDirection: "column",
         gap: 10,
-        // alignItems: "flex-start",
+        // alignItems: "flex-start",,
+        padding: 10,
         marginBottom: 20,
-        width: '90%'
+        borderRadius: 10
     },
     container: {
         flex: 1,
@@ -70,12 +71,13 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         fontWeight: '500',
-        color: '#100F14',
+        color: '#fff',
         textAlign: "left",
         width: '90%'
     },
     title: {
-        fontSize: 30
+        fontSize: 30,
+        color: '#fff',
     },
     row: {
         flexDirection: "row",

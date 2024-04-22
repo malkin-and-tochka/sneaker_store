@@ -38,12 +38,15 @@ const CreateCategory = () => {
                 <CustomButton propStyles={styles.rowButtons} buttonText={'Update category'}
                               handle={() => setCreateOrUpdate('update')} fill={createOrUpdate !== 'update'}/>
             </View>
-            <FormElement handle={(text) => setCategoryName(text)} value={categoryName} title={'Category name'}
+            <FormElement textStyles={styles.text} handle={(text) => setCategoryName(text)} value={categoryName}
+                         title={'Category name'}
                          label={'Category name'}/>
-            <FormElement handle={(text) => setCategoryDescription(text)} value={categoryDescription}
+            <FormElement textStyles={styles.text} handle={(text) => setCategoryDescription(text)}
+                         value={categoryDescription}
                          title={'Category description'} label={'Category description'}/>
             {createOrUpdate === 'update' ?
-                <FormElement handle={text => setCategoryId(text)} value={categoryId} title={'Category Id'}
+                <FormElement textStyles={styles.text} handle={text => setCategoryId(text)} value={categoryId}
+                             title={'Category Id'}
                              label={'Category Id'}/> : null}
             {validator && <Text style={styles.error}>Please, check the valid values of the fields</Text>}
             <View style={styles.row}>
@@ -58,12 +61,13 @@ const CreateCategory = () => {
 
 const styles = StyleSheet.create({
     inputsWrapper: {
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#5552FF',
         // flexDirection: "column",
         gap: 10,
-        // alignItems: "flex-start",
+        // alignItems: "flex-start",,
+        padding: 10,
         marginBottom: 20,
-        width: '90%'
+        borderRadius: 10
     },
     container: {
         flex: 1,
@@ -83,7 +87,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         fontWeight: '500',
-        color: '#100F14',
+        color: '#fff',
         textAlign: "left",
         width: '90%'
     },

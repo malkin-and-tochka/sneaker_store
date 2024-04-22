@@ -9,7 +9,6 @@ import CombineForm from "../screens/authorization/CombineForm";
 import AdminPage from "../screens/user/admin/AdminPage";
 import {useDispatch, useSelector} from "react-redux";
 import {getIsAuth, setAuth} from "../../redux/reducers/authReducer";
-import NeedToAuth from "./NeedToAuth";
 import {useEffect} from "react";
 import {refresh} from "../../api/authApi";
 import OrderScreen from "../screens/order/OrderScreen";
@@ -26,7 +25,7 @@ const Stack = createNativeStackNavigator()
 const Navigation = () => {
     const dispatch = useDispatch()
     const isUserAuth = useSelector(getIsAuth)
-    console.log(isUserAuth)
+    console.log('user authorized:    ',isUserAuth)
     useEffect(() => {
         (async () => {
             const checkOnAuth = await refresh()
@@ -40,14 +39,14 @@ const Navigation = () => {
     return (
         <NavigationContainer>
             {isUserAuth && <NavigationRow/>}
-            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={isUserAuth ? 'Home' : 'NeedToAuth'}>
+            {isUserAuth && <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={'Home'}>
                 <Stack.Screen name="Home" component={HomeScreen}/>
                 <Stack.Screen name="Cart" component={CartScreen}/>
                 <Stack.Screen name="Account" component={AccountScreen}/>
                 <Stack.Screen name="productPage" component={ProductPage}/>
                 <Stack.Screen name="Admin" component={AdminPage}/>
                 <Stack.Screen name="CombineForm" component={CombineForm}/>
-                <Stack.Screen name="NeedToAuth" component={NeedToAuth}/>
+                {/*<Stack.Screen name="NeedToAuth" component={NeedToAuth}/>*/}
                 <Stack.Screen name="Categories" component={CategoriesList}/>
                 <Stack.Screen name="Favorites" component={FavoritesScreen}/>
                 <Stack.Screen name="CategoryScreen" component={CategoryProductsScreen}/>
@@ -55,7 +54,8 @@ const Navigation = () => {
                 <Stack.Screen name="OrderAddress" component={OrderAddress}/>
                 <Stack.Screen name="OrderDiscount" component={OrderDiscount}/>
                 <Stack.Screen name="OrderPayment" component={OrderPayment}/>
-            </Stack.Navigator>
+            </Stack.Navigator>}
+            {!isUserAuth && <CombineForm/>}
         </NavigationContainer>
     );
 }

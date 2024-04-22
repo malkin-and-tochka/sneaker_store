@@ -9,7 +9,6 @@ const NeedToAuth = () => {
     const isAuth = useSelector(getIsAuth)
     useEffect(()=>{
         if (isAuth) {
-            console.log('fuck')
             navigation.navigate('Home')
         }
     })

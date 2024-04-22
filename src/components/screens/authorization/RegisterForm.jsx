@@ -23,7 +23,7 @@ const RegisterForm = () => {
         if(registerData.confirmedPassword === registerData.password){
             const res = await register(registerData)
             if (res.status === 200) {
-                navigation.navigate('Home')
+                // navigation.navigate('Home')
                 dispatch(setAuth(true))
             }
         }

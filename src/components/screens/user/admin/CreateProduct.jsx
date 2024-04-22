@@ -116,14 +116,14 @@ const CreateProduct = () => {
                 <CustomButton propStyles={styles.rowButtons} buttonText={'Update product'}
                               handle={() => setCreateOrUpdate('update')} fill={createOrUpdate !== 'update'}/>
             </View>
-            <FormElement handle={handleChange("name")} value={formData.name} title={'Name'} label={'Name'}/>
-            <FormElement handle={handleChange("description")} value={formData.description} title={'Description'}
+            <FormElement textStyles={styles.text} handle={handleChange("name")} value={formData.name} title={'Name'} label={'Name'}/>
+            <FormElement textStyles={styles.text} handle={handleChange("description")} value={formData.description} title={'Description'}
                          label={'Description'}/>
-            <FormElement handle={handleChange("categoryId")} value={formData.categoryId} title={'Category ID'}
+            <FormElement textStyles={styles.text} handle={handleChange("categoryId")} value={formData.categoryId} title={'Category ID'}
                          label={'Category ID'}/>
-            <FormElement handle={handleChange("price")} value={formData.price} title={'Price'} label={'Price'}/>
+            <FormElement textStyles={styles.text} handle={handleChange("price")} value={formData.price} title={'Price'} label={'Price'}/>
             {createOrUpdate === 'update' ?
-                <FormElement handle={text => setProductId(text)} value={productId} title={'Product Id'}
+                <FormElement textStyles={styles.text} handle={text => setProductId(text)} value={productId} title={'Product Id'}
                              label={'Product Id'}/> : null}
             <Text style={styles.text}>
                 Colors: {formData.colors.map((el, index) => index + 1 !== formData.colors.length ?
@@ -136,6 +136,7 @@ const CreateProduct = () => {
                     value={newColor}
                     onChangeText={text => setNewColor(text)}
                     style={[styles.input, {width: '70%'}]}
+                    placeholderTextColor={'#fff'}
                 />
                 <CustomButton buttonText={'Add'} handle={addColor} propStyles={styles.microButton} fill={true}/>
             </View>
@@ -150,6 +151,7 @@ const CreateProduct = () => {
                     value={newSize}
                     onChangeText={text => setNewSize(text)}
                     style={[styles.input, {width: '70%'}]}
+                    placeholderTextColor={'#fff'}
                 />
                 <CustomButton buttonText={'Add'} handle={addSize} propStyles={styles.microButton} fill={true}/>
             </View>
@@ -167,21 +169,24 @@ const CreateProduct = () => {
 
 const styles = StyleSheet.create({
     inputsWrapper: {
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#5552FF',
         // flexDirection: "column",
         gap: 10,
-        // alignItems: "flex-start",
-        marginBottom: 20
+        // alignItems: "flex-start",,
+        padding: 10,
+        marginBottom: 20,
+        borderRadius: 10
     },
     input: {
         width: '90%',
         height: 40,
         fontSize: 20,
         fontWeight: '500',
-        borderColor: '#100F14',
+        borderColor: '#fff',
         borderWidth: 2,
         padding: 5,
-        borderRadius: 5
+        borderRadius: 5,
+        color: '#fff'
     },
     row: {
         flexDirection: "row",
@@ -191,7 +196,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         fontWeight: '500',
-        color: '#100F14',
+        color: '#fff',
         textAlign: "left",
         width: '90%'
     },

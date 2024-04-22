@@ -17,13 +17,14 @@ export const postOrder = async ({
                                     paymentDetailsRequest
                                 }) => {
     try {
-        console.log('request', orderProductRequestList,
+        const res = await authManager.post('/orders', {
+            orderProductRequestList,
             discountCodeName,
             address,
             customerNotes,
             shippingType,
-            paymentDetailsRequest)
-        const res = await authManager.post('/orders', {orderProductRequestList, discountCodeName, address, customerNotes, shippingType, paymentDetailsRequest})
+            paymentDetailsRequest
+        })
         console.log(res.data)
         return res.data
     } catch (e) {
@@ -51,6 +52,6 @@ export const getDiscountByName = async (name) => {
         const res = await authManager.get(`/orders/discountCode/${name}`)
         return res.data
     } catch (e) {
-        console.log('request ',e)
+        console.log('request ', e)
     }
 }

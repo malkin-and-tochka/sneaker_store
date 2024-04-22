@@ -15,7 +15,8 @@ const initialState = {
         cardNumber: '',
         validFor: '',
         cvv: ''
-    }
+    },
+    discountCodeValue: 0
 }
 
 export const tempOrderReducer = (state = initialState, action) => {
@@ -40,7 +41,8 @@ export const tempOrderReducer = (state = initialState, action) => {
         case SET_ORDER_DISCOUNT:
             return {
                 ...state,
-                discountCodeName: action.discountCodeName
+                discountCodeName: action.discountCodeName,
+                discountCodeValue: action.discountCodeValue
             }
         default:
             return state
@@ -58,9 +60,10 @@ export const setOrderPayment = (cardNumber, validFor, cvv) => ({
     type: SET_ORDER_ADDRESS,
     cardNumber, validFor, cvv
 })
-export const setOrderDiscountCode = (discountCodeName) => ({
+export const setOrderDiscountCode = (discountCodeName, discountCodeValue) => ({
     type: SET_ORDER_DISCOUNT,
-    discountCodeName
+    discountCodeName,
+    discountCodeValue
 })
 const getTempOrderState = state => state.tempOrder;
 

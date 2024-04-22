@@ -5,9 +5,10 @@ import {login, register} from "../../../api/authApi";
 import {useNavigation} from "@react-navigation/native";
 import {useDispatch} from "react-redux";
 import {setAuth} from "../../../redux/reducers/authReducer";
+import {getAllProducts} from "../../../api/productsApi";
+import {setProducts} from "../../../redux/reducers/productsReducer";
 
 const LoginForm = () => {
-    const navigation = useNavigation()
     const dispatch = useDispatch()
     const [loginData, setLoginData] = useState({
         username: "",
@@ -19,7 +20,8 @@ const LoginForm = () => {
     const onLoginSubmit = async () => {
         const statusCode = await login(loginData)
         if (statusCode === 200) {
-            navigation.navigate('Home')
+            const products = await getAllProducts()
+            if  (products) dispatch(setProducts(products))
             dispatch(setAuth(true))
         }
     }

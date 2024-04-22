@@ -4,6 +4,8 @@ import {getProductsSelector, setProducts} from "../../../redux/reducers/products
 import {useEffect} from "react";
 import {getAllProducts} from "../../../api/productsApi";
 import PaginatorView from "./Paginator/PaginatorView";
+import FilterAndSorting from "./FilterAndSorting/FilterAndSorting";
+import {getIsAuth} from "../../../redux/reducers/authReducer";
 
 const HomeScreen = () => {
         const dispatch = useDispatch()
@@ -11,28 +13,20 @@ const HomeScreen = () => {
         useEffect(() => {
             (async () => {
                 const data = await getAllProducts()
-                if (data) dispatch(setProducts(data))
+                if (data.length !== 0) dispatch(setProducts(data))
             })()
         }, []);
-        if (products) return (
-            <View style={styles.container}>
-                <ScrollView showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{rowGap: 25, paddingBottom: 200, paddingTop: 50}} alignItems='column'
-                            style={styles.column}>
-                    <PaginatorView items={products}/>
-                </ScrollView>
-            </View>
-        );
+        if (!products) return <Text>Loading...</Text>
         return (
             <View style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}
                             contentContainerStyle={{rowGap: 25, paddingBottom: 200, paddingTop: 50}} alignItems='column'
                             style={styles.column}>
-
-                    <Text>Loading...</Text>
+                    <FilterAndSorting initialProducts={products}/>
+                    {/*<PaginatorView items={products}/>*/}
                 </ScrollView>
             </View>
-        );
+        )
     }
 ;
 

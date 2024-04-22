@@ -1,10 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, TextInput, View} from "react-native";
 
-const FormElement = ({title, handle, value, label}) => {
+const FormElement = ({title, handle, value, label, textStyles, inputStyles}) => {
     return (
         <View style={styles.wrapper}>
-            <Text style={styles.text}>
+            <Text style={[styles.text, textStyles]}>
                 {title}
             </Text>
             <TextInput
@@ -12,7 +12,8 @@ const FormElement = ({title, handle, value, label}) => {
                 placeholder={label}
                 value={value}
                 onChangeText={handle}
-                style={styles.input}
+                style={[styles.input, inputStyles]}
+                placeholderTextColor={'#fff'}
             />
         </View>
     );
@@ -27,10 +28,11 @@ const styles = StyleSheet.create({
         height: 40,
         fontSize: 20,
         fontWeight: '500',
-        borderColor: '#100F14',
+        borderColor: '#fff',
         borderWidth: 2,
         padding: 5,
-        borderRadius: 5
+        borderRadius: 5,
+        color: '#fff'
     },
     text: {
         fontSize: 20,

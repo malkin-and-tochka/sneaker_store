@@ -31,7 +31,7 @@ const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
     }
     const setOrderDiscountCodeHandler = () => {
         if (successTry === 'success') {
-            dispatch(setOrderDiscountCode(discountCode))
+            dispatch(setOrderDiscountCode(discountCode, discountCodeValue))
         }
     }
     const combineHandlers = () => {
@@ -64,11 +64,13 @@ const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: "center",
-        flexDirection: "column",
-        flex: 1,
+        backgroundColor: '#5552FF',
+        // flexDirection: "column",
+        gap: 10,
+        // alignItems: "flex-start",,
         padding: 10,
-        gap: 10
+        marginBottom: 20,
+        borderRadius: 10
     },
     input: {
         width: '80%',

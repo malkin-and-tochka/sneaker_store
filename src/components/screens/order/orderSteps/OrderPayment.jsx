@@ -15,6 +15,7 @@ const OrderPayment = ({prevButtonHandler}) => {
     const totalPrice = useSelector(getTotalPrice)
     const dispatch = useDispatch()
     const orderState = useSelector(getTempOrder)
+    const discountValue = orderState.discountCodeValue
     const validDataHandle = text => {
         let newText = text;
         if (text.length === 2 && validFor.length === 1) {
@@ -73,9 +74,10 @@ const OrderPayment = ({prevButtonHandler}) => {
             </View>
             <View style={styles.row}>
                 <GoBackButton handler={prevButtonHandler}/>
-                <CustomButton handle={combineHandler} fill={false} propStyles={{minHeight: 50, padding: 5, backgroundColor: '#ABDD48', borderWidth: 0, borderRadius: 15, flexDirection: 'row', gap: 10}}>
-                    <Ionicons name="bag-handle-outline" size={40} color="black" />
-                    <Text style={{fontSize: 25}}>${totalPrice}</Text>
+                <CustomButton handle={combineHandler} fill={false} propStyles={{minHeight: discountValue ? 150 : 100 ,minWidth: 100 , padding: 5, backgroundColor: '#ABDD48', borderWidth: 0, borderRadius: 15, flexDirection: 'column', gap: 5}}>
+                    {discountValue ? <Text style={{fontSize: 25, textDecorationLine: 'line-through'}}>${totalPrice}</Text> : null}
+                    <Text style={{fontSize: 25}}>${totalPrice - discountValue}</Text>
+                    <Ionicons name="bag-handle-outline" size={40} color="black"/>
                 </CustomButton>
             </View>
         </View>

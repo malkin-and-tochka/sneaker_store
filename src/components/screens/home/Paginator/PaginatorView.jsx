@@ -8,9 +8,10 @@ import {Text, View} from "react-native";
 import CustomButton from "../../../reused/CustomButton";
 import {useNavigation} from "@react-navigation/native";
 import GoBackButton from "../../../navigation/GoBackButton";
+import {AntDesign} from "@expo/vector-icons";
 
 const PaginatorView = ({items}) => {
-    if(items.length === 0) return <><Text>Empty :(</Text><GoBackButton/></>
+    // if(items.length === 0) return <><Text>Empty :(</Text><GoBackButton/></>
     const dispatch = useDispatch()
     const currentPage = useSelector(getCurrentPage)
     const itemsPerPage = useSelector(getPageSize);
@@ -30,9 +31,6 @@ const PaginatorView = ({items}) => {
                                                                       sizes={el.sizes}/>), [currentItems])
     return (
         <>
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <PageSizeSelector/>
-            </View>
             {ProductsToJSX}
             <Paginator totalPages={totalPages} setCurrentPage={setNewCurrentPage} currentPage={currentPage}/>
         </>

@@ -12,7 +12,7 @@ const PreviewOrderList = ({order}) => {
             </Text>
             <InfoRow title={'Date:'} text={order.date}/>
             {order.discountCode ?
-            <InfoRow title={'Price:'} text={order.totalPrice - order.discountCode.discountPrice}/>
+            <InfoRow title={'Price:'} text={`${order.totalPrice - order.discountCode.discountPrice}$`}/>
                 :
                 <InfoRow title={'Price:'} text={order.totalPrice}/>}
             <InfoRow title={'Address:'} text={order.address}/>

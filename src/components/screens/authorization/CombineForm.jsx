@@ -8,13 +8,13 @@ import {useDispatch} from "react-redux";
 import {setAuth} from "../../../redux/reducers/authReducer";
 
 const CombineForm = () => {
-    // const dispatch = useDispatch()
-    // useEffect(() => {
-    //     (async ()=>{
-    //         const res = await refresh()
-    //         if (res) dispatch(setAuth(true))
-    //     })()
-    // }, []);
+    const dispatch = useDispatch()
+    useEffect(() => {
+        (async ()=>{
+            const res = await refresh()
+            if (res) dispatch(setAuth(true))
+        })()
+    }, []);
     const [loginOrRegister, setLoginOrRegister] = useState('login')
     return (
         <View style={styles.highWrapper}>

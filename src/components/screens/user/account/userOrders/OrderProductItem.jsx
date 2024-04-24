@@ -9,9 +9,8 @@ const OrderProductItem = ({img, name, price, amount, categoryName, id, color, si
                 <View style={styles.imageWrapper}>
                     <Image resizeMethod={'resize'} style={styles.img} source={{uri: validImg}}/>
                 </View>
-                <View style={[styles.column, {maxWidth: '26%'}]}>
+                <View style={[styles.column, {maxWidth: '25%'}]}>
                     <Text style={[styles.text, {maxWidth: 140}]}>{name}</Text>
-                    {/*<Text style={styles.text}>Category: {categoryName}</Text>*/}
                 </View>
                 <View>
                     <Text style={styles.price}>{price}$</Text>
@@ -50,11 +49,12 @@ const styles = StyleSheet.create({
         flex: 1,
         width: null,
         height: null,
-        resizeMode: 'contain'
+        resizeMode: 'contain',
     },
     imageWrapper: {
         height: 100,
-        width: 160
+        width: 160,
+        maxWidth: '50%'
     },
     text: {
         fontSize: 16,
@@ -74,7 +74,8 @@ const styles = StyleSheet.create({
     subRow: {
         flexDirection: "row",
         alignItems: "center",
-        width: '30%',
+        minWidth: '20%',
+        maxWidth: '30%',
         gap: 20
     },
     paramText: {
@@ -82,7 +83,8 @@ const styles = StyleSheet.create({
         fontWeight: '500'
     },
     amount: {
-        fontSize: 18
+        fontSize: 18,
+        maxWidth: '30%'
     }
 })
 

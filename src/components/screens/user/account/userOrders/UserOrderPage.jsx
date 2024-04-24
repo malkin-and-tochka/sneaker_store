@@ -4,7 +4,7 @@ import InfoRow from "./InfoRow";
 import GoBackButton from "../../../../navigation/GoBackButton";
 import OrderProductItem from "./OrderProductItem";
 
-const UserOrderScreen = (props) => {
+const UserOrderPage = (props) => {
     const {
         address,
         shippingType,
@@ -45,7 +45,7 @@ const UserOrderScreen = (props) => {
                     <Text style={styles.title}>Payment info:</Text>
                     <InfoRow text={date} title={'Date:'}/>
                     <InfoRow text={cardNumber} title={'Card number:'}/>
-                    <InfoRow text={totalPrice} title={'Price:'}/>
+                    <InfoRow text={`${totalPrice}$`} title={'Price:'}/>
                     {discountCode && <InfoRow text={`${discountCode.discountPrice}$`} title={`Discount: ${discountCode.name}`}/>}
                     <InfoRow text={discountCode.discountPrice ? `${totalPrice - discountCode.discountPrice}$` : `${totalPrice}`}
                              title={'Final price'}/>
@@ -93,4 +93,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default UserOrderScreen;
+export default UserOrderPage;

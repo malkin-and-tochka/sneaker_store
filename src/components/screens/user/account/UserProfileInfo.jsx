@@ -13,16 +13,6 @@ import FormElement from "../admin/FormElement";
 import CustomButton from "../../../reused/CustomButton";
 
 const UserProfileInfo = () => {
-    useEffect(() => {
-        (async () => {
-            const data = await getAccountData()
-            const roles = await getAccountRoles()
-            if (data) dispatch(setAllAccountInfo(data))
-            if (roles) dispatch(setRoles(roles))
-        })();
-
-    }, []);
-
     const navigation = useNavigation()
     const accountInfo = useSelector(getAccountInfoSelector);
     const isAdmin = useSelector(isUserAdmin)
@@ -64,7 +54,7 @@ const UserProfileInfo = () => {
         }
         if (valid) {
             const res = await updateAccountData(newInfo.firstName, newInfo.lastName, newInfo.mobilePhone)
-            if (res.code === '400'){
+            if (res.code === '400') {
                 setNewInfoErrors(prevState => ({...prevState, ...res.value}))
             } else {
                 dispatch(setFirstName(newInfo.firstName));
@@ -79,24 +69,29 @@ const UserProfileInfo = () => {
         <View style={styles.wrapper}>
             {editMode ? (
                 <>
-                    <FormElement validator={newInfoErrors.firstName} textStyles={styles.text} handle={text => handleFirstNameChange(text)}
+                    <FormElement validator={newInfoErrors.firstName} textStyles={styles.text}
+                                 handle={text => handleFirstNameChange(text)}
                                  value={newInfo.firstName} title={'Your first name'}
                                  label={'Your first name'}/>
-                    <FormElement validator={newInfoErrors.lastName} textStyles={styles.text} handle={text => handleLastNameChange(text)}
+                    <FormElement validator={newInfoErrors.lastName} textStyles={styles.text}
+                                 handle={text => handleLastNameChange(text)}
                                  value={newInfo.lastName} title={'Your last name'}
                                  label={'Your last name'}/>
-                    <FormElement validator={newInfoErrors.mobilePhone} textStyles={styles.text} handle={text => handleMobilePhoneChange(text)}
+                    <FormElement validator={newInfoErrors.mobilePhone} textStyles={styles.text}
+                                 handle={text => handleMobilePhoneChange(text)}
                                  value={newInfo.mobilePhone} title={'Your mobile phone'}
                                  label={'Your mobile phone'}/>
-                    <CustomButton handle={handleSave} buttonText={"Save"} fill={true} propStyles={{height: 40}}/>
+                    <View style={styles.row}>
+                        <CustomButton handle={handleSave} buttonText={"Save"} fill={true} propStyles={{height: 40, minWidth: '40%'}}/>
+                        <CustomButton handle={()=>setEditMode(false)} buttonText={"Cancel"} fill={true} propStyles={{height: 40, minWidth: '40%'}}/>
+                    </View>
                 </>
             ) : (
                 <>
                     <Text style={styles.textInfo}>First name: {accountInfo.firstName}</Text>
                     <Text style={styles.textInfo}>Last name: {accountInfo.lastName}</Text>
                     <Text style={styles.textInfo}>Email: {accountInfo.email}</Text>
-                    <Text style={styles.textInfo}>Mobile
-                        phone: {accountInfo.mobilePhone ? accountInfo.mobilePhone : 'Empty'}</Text>
+                    <Text style={styles.textInfo}>Mobile phone: {accountInfo.mobilePhone ? accountInfo.mobilePhone : 'Empty'}</Text>
                     <CustomButton handle={handleEdit} buttonText={"Change"} fill={true} propStyles={{height: 40}}/>
                 </>
             )}
@@ -108,12 +103,13 @@ const UserProfileInfo = () => {
 
 const styles = StyleSheet.create({
     wrapper: {
-        backgroundColor: '#5552FF',
         gap: 10,
         padding: 10,
         marginBottom: 20,
         borderRadius: 10,
-        width: '90%'
+        width: '90%',
+        borderColor: '#D9D9D9',
+        borderWidth: 2
     },
     container: {
         flex: 1,
@@ -123,19 +119,24 @@ const styles = StyleSheet.create({
     textInfo: {
         fontSize: 20,
         fontWeight: '500',
-        color: '#fff'
+        color: '#000'
     },
     text: {
         fontSize: 20,
         fontWeight: '500',
-        color: '#fff',
+        color: '#000',
         textAlign: "left",
         width: '90%'
     },
     title: {
         fontSize: 24,
         marginLeft: '5%'
-    }
+    },
+    row: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        width: '100%'
+    },
 })
 
 export default UserProfileInfo;

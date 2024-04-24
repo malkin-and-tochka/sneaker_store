@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     },
     input: {
         minWidth: '100%',
-        height: 40,
+        minHeight: 40,
         fontSize: 20,
         fontWeight: '500',
         borderColor: '#000',
@@ -40,14 +40,14 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#100F14',
         textAlign: "left",
-        minWidth: '90%'
+        maxWidth: '50%',
     },
     validator: {
         position: "absolute",
         right: 0,
         top: 5,
         fontWeight: '500',
-        maxWidth: '70%',
+        maxWidth: '50%',
         fontSize: 10
     }
 });

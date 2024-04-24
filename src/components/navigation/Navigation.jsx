@@ -15,7 +15,7 @@ import OrderScreen from "../screens/order/OrderScreen";
 import CategoriesList from "../screens/categories/CategoriesList";
 import FavoritesScreen from "../screens/favorites/FavoritesScreen";
 import CategoryProductsScreen from "../screens/categories/CategoryProductsScreen";
-import UserOrderScreen from "../screens/user/account/userOrders/UserOrderScreen";
+import UserOrderPage from "../screens/user/account/userOrders/UserOrderPage";
 import {Text, TouchableOpacity} from "react-native";
 import Header from "../reused/Header";
 
@@ -39,7 +39,7 @@ const Navigation = () => {
                 <Stack.Screen name="Favorites" component={isUserAuth ? FavoritesScreen : CombineForm}/>
                 <Stack.Screen name="CategoryScreen" component={CategoryProductsScreen}/>
                 <Stack.Screen name="OrderScreen" component={OrderScreen}/>
-                <Stack.Screen name="UserOrders" component={UserOrderScreen}/>
+                <Stack.Screen name="UserOrders" component={UserOrderPage}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

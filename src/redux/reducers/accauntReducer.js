@@ -49,10 +49,10 @@ export const setFirstName = firstName => ({type: SET_FIRST_NAME, firstName})
 export const setRoles = roles => ({type: SET_ROLES, roles})
 export const setAllAccountInfo = newState => ({type: SET_ALL_ACCOUNT_INFO, newState})
 
-const getFirstName = (state) => state.firstName;
-const getLastName = (state) => state.lastName;
-const getEmail = (state) => state.email;
-const getMobilePhone = (state) => state.mobilePhone;
+export const getFirstName = (state) => state.account.firstName;
+export const getLastName = (state) => state.lastName;
+export const getEmail = (state) => state.email;
+export const getMobilePhone = (state) => state.mobilePhone;
 
 export const getAccountInfoSelector = (state) => state.account
 export const isUserAdmin = state => state.account.roles.some(role => role === 'ADMIN')

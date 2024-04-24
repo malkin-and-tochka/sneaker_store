@@ -1,10 +1,13 @@
 import {useState} from 'react';
 import {postProduct, postProductImage, updateProduct} from "../../../../api/adminApi";
-import {StyleSheet, Text, TextInput, View} from "react-native";
+import {Pressable, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 import FormElement from "./FormElement";
 import CustomButton from "../../../reused/CustomButton";
 import ImagePick from "./ImagePick";
 import {prepareImg} from "../../../../helpFunctions/prepareImageToRequest";
+import {colorsList} from "../../../../constants";
+import CirclesCarouselElement from "./CirclesCarouselElement";
+import {updateArray} from "../../../../helpFunctions/toggleArray";
 
 
 const CreateProduct = () => {
@@ -40,14 +43,18 @@ const CreateProduct = () => {
     }
     const addColor = () => {
         if (newColor) {
-            setFormData({...formData, colors: [...formData.colors, newColor]})
-            setNewColor('')
+            setFormData(prevState => ({...prevState, colors: [...prevState.colors, newColor]}))
         }
+    }
+    const toggleColor = (color) => {
+        const newColorsArray = updateArray(formData.colors, color)
+        setFormData(prevState => ({...prevState, colors: newColorsArray}))
     }
     const handleChange = (field) => (value) => {
         setFormData({...formData, [field]: value});
     };
     const onSubmit = async () => {
+        console.log(formData)
         let valid = true
         setFormDataErrors({
             name: '',
@@ -140,17 +147,9 @@ const CreateProduct = () => {
                 Colors: {formData.colors.map((el, index) => index + 1 !== formData.colors.length ?
                 <Text key={el} id={el}>{el}, </Text> : <Text key={el} id={el}>{el}</Text>)}
             </Text>
-            <View style={styles.row}>
-                <TextInput
-                    label="Color"
-                    placeholder="Color"
-                    value={newColor}
-                    onChangeText={text => setNewColor(text)}
-                    style={[styles.input, {width: '70%'}]}
-                    placeholderTextColor={'#000'}
-                />
-                <CustomButton buttonText={'Add'} handle={addColor} propStyles={styles.microButton} fill={true}/>
-            </View>
+            <ScrollView style={{maxHeight: 40}} showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{columnGap: 5, padding: 0}}>
+                {colorsList.map(color => <CirclesCarouselElement key={color} color={color} toggleColor={toggleColor}/>)}
+            </ScrollView>
             <Text style={styles.text}>
                 Sizes: {formData.sizes.map((el, index) => index + 1 !== formData.sizes.length ?
                 <Text key={el} id={el}>{el}, </Text> : <Text key={el} id={el}>{el}</Text>)}
@@ -213,7 +212,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#000',
         textAlign: "left",
-        width: '90%'
+        maxWidth: '90%'
     },
     title: {
         fontSize: 30

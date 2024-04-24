@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {StyleSheet, Text, TouchableOpacity} from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import InfoRow from "./InfoRow";
 
@@ -11,7 +11,10 @@ const PreviewOrderList = ({order}) => {
                 Order details:
             </Text>
             <InfoRow title={'Date:'} text={order.date}/>
-            <InfoRow title={'Price:'} text={order.totalPrice}/>
+            {order.discountCode ?
+            <InfoRow title={'Price:'} text={order.totalPrice - order.discountCode.discountPrice}/>
+                :
+                <InfoRow title={'Price:'} text={order.totalPrice}/>}
             <InfoRow title={'Address:'} text={order.address}/>
         </TouchableOpacity>
     );

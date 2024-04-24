@@ -1,8 +1,6 @@
-import {getCategories} from "../../../../api/categoriesApi";
 import {postCategory} from "../../../../api/adminApi";
-import {Button, StyleSheet, Text, TextInput, View} from "react-native";
-import CreateProduct from "./CreateProduct";
-import {useEffect, useState} from "react";
+import {StyleSheet, Text, View} from "react-native";
+import {useState} from "react";
 import FormElement from "./FormElement";
 import CustomButton from "../../../reused/CustomButton";
 
@@ -61,13 +59,14 @@ const CreateCategory = () => {
 
 const styles = StyleSheet.create({
     inputsWrapper: {
-        backgroundColor: '#5552FF',
         // flexDirection: "column",
         gap: 10,
         // alignItems: "flex-start",,
         padding: 10,
         marginBottom: 20,
-        borderRadius: 10
+        borderRadius: 10,
+        borderColor: '#D9D9D9',
+        borderWidth: 2
     },
     container: {
         flex: 1,
@@ -87,7 +86,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         fontWeight: '500',
-        color: '#fff',
+        color: '#000',
         textAlign: "left",
         width: '90%'
     },

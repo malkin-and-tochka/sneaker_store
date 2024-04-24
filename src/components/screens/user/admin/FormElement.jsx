@@ -14,7 +14,7 @@ const FormElement = ({title, handle, value, label, textStyles, inputStyles, plac
                 value={value}
                 onChangeText={handle}
                 style={[styles.input, inputStyles]}
-                placeholderTextColor={placeholderColor ? placeholderColor : '#fff'}
+                placeholderTextColor={'#000'}
             />
         </View>
     );
@@ -29,11 +29,11 @@ const styles = StyleSheet.create({
         height: 40,
         fontSize: 20,
         fontWeight: '500',
-        borderColor: '#fff',
+        borderColor: '#000',
         borderWidth: 2,
         padding: 5,
         borderRadius: 5,
-        color: '#fff'
+        color: '#000'
     },
     text: {
         fontSize: 20,

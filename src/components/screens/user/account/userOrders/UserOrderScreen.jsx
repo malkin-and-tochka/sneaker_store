@@ -9,8 +9,7 @@ const UserOrderScreen = (props) => {
         address,
         shippingType,
         shippingCost,
-        discountPrice,
-        discountCodeName,
+        discountCode,
         customerNotes,
         date,
         id,
@@ -19,7 +18,18 @@ const UserOrderScreen = (props) => {
         cardNumber,
         orderProductList,
     } = props.route.params
-    const orderProductsView = orderProductList.map(prod => <OrderProductItem key={`${prod.id}${prod.color}${prod.quantity}`} id={prod.id} color={prod.color} size={prod.size} name={prod.name} amount={prod.quantity} categoryName={prod.categoryName} price={prod.price} img={prod.imageResponseList[0].url}/>)
+    const orderProductsView = orderProductList.map(prod => <OrderProductItem
+        key={`${prod.id}${prod.color}${prod.quantity}`}
+        id={prod.id}
+        color={prod.color}
+        size={prod.size}
+        name={prod.name}
+        amount={prod.quantity}
+        categoryName={prod.categoryName}
+        price={prod.price}
+        img={prod.imageResponseList[0].url}
+    />)
+    console.log(discountCode)
     return (
         <ScrollView showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingBottom: 200, paddingTop: 20, alignItems: 'center', rowGap: 10}}
@@ -37,8 +47,9 @@ const UserOrderScreen = (props) => {
                     <InfoRow text={date} title={'Date:'}/>
                     <InfoRow text={cardNumber} title={'Card number:'}/>
                     <InfoRow text={totalPrice} title={'Price:'}/>
-                    {discountPrice &&<InfoRow text={`${discountPrice}$`} title={`Discount: ${discountCodeName}`}/>}
-                    <InfoRow text={discountPrice ? `${totalPrice - discountPrice}$` : `${totalPrice}`} title={'Final price'}/>
+                    {discountCode && <InfoRow text={`${discountCode.discountPrice}$`} title={`Discount: ${discountCode.name}`}/>}
+                    <InfoRow text={discountCode.discountPrice ? `${totalPrice - discountCode.discountPrice}$` : `${totalPrice}`}
+                             title={'Final price'}/>
                 </View>
                 <View style={[styles.subContainer, styles.productsData]}>
                     <Text style={styles.title}>Cart info:</Text>

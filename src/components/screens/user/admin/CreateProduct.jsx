@@ -1,5 +1,5 @@
 import {useState} from 'react';
-import {postProduct, postProductImage, updateProduct} from "../../../../api/adminApi";
+import {postProduct, postProductImage} from "../../../../api/adminApi";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from 'expo-file-system'
 import {StyleSheet, Text, TextInput, View} from "react-native";
@@ -31,9 +31,9 @@ const CreateProduct = () => {
     const [newSize, setNewSize] = useState()
     const [newColor, setNewColor] = useState()
     const [image, setImage] = useState()
-    const [validator, setValidator] = useState(false)
     const [createOrUpdate, setCreateOrUpdate] = useState('create')
     const [productId, setProductId] = useState('')
+    const [answerMessage, setAnswerMessage] = useState('')
     const saveImage = async image => {
         try {
             setImage(image)
@@ -57,40 +57,64 @@ const CreateProduct = () => {
         setFormData({...formData, [field]: value});
     };
     const onSubmit = async () => {
-        if (createOrUpdate === 'create') {
-            if (formData.colors.length && formData.sizes.length && formData.name && formData.price && formData.categoryId && formData.description && image) {
+        let valid = true
+        setFormDataErrors({
+            name: '',
+            description: '',
+            categoryId: '',
+            price: '',
+            colors: '',
+            sizes: '',
+            image: ''
+        })
+        // if (createOrUpdate === 'create') {
+            if (formData.name.length === 0 || formData.name.length > 120) {
+                valid = false
+                setFormDataErrors(prevState => ({...prevState, name: 'Size has to be between 1 and 120'}))
+            }
+            if (formData.description.length === 0 || formData.description.length > 1200) {
+                valid = false
+                setFormDataErrors(prevState => ({...prevState, description: 'Size has to be between 1 and 1200'}))
+            }
+            if (formData.price.length === 0) {
+                valid = false
+                setFormDataErrors(prevState => ({...prevState, price: 'Null not allowed'}))
+            }
+            if (formData.categoryId.length === 0) {
+                valid = false
+                setFormDataErrors(prevState => ({...prevState, categoryId: 'Null not allowed'}))
+            }
+            if (valid) {
                 const productCode = await postProduct({...formData})
-                const formImageData = new FormData()
-                formImageData.append(`multipartFile`, {
-                    uri: image.uri,
-                    type: image.mimeType,
-                    name: 'testFile'
-                })
-                formImageData.append('isPrime', true)
-                formImageData.append('id', productCode)
-                const config = {
-                    headers: {
-                        'accept': 'application/json',
-                        'Content-Type': 'multipart/form-data',
-                    }
-                }
-                const imageRes = await postProductImage(formImageData, config)
-                if (!!productCode) {
-                    setValidator(false)
+                console.log('attention', productCode)
+                if (productCode.code === '400') {
+                    setAnswerMessage("Request body is missing")
                 } else {
-                    setValidator(true)
+                    const formImageData = new FormData()
+                    formImageData.append(`multipartFile`, {
+                        uri: image.uri,
+                        type: image.mimeType,
+                        name: 'testFile'
+                    })
+                    formImageData.append('isPrime', true)
+                    formImageData.append('id', productCode)
+                    const config = {
+                        headers: {
+                            'accept': 'application/json',
+                            'Content-Type': 'multipart/form-data',
+                        }
+                    }
+                    const imageRes = await postProductImage(formImageData, config)
                 }
-            } else {
-                setValidator(true)
             }
-        } else {
-            if (formData.colors.length && formData.sizes.length && formData.name && formData.price && formData.categoryId && formData.description && productId) {
-                const res = await updateProduct({...formData, productId})
-                setValidator(true)
-            } else {
-                setValidator(false)
-            }
-        }
+        // } else {
+        //     if (formData.colors.length && formData.sizes.length && formData.name && formData.price && formData.categoryId && formData.description && productId) {
+        //         const res = await updateProduct({...formData, productId})
+        //         setValidator(true)
+        //     } else {
+        //         setValidator(false)
+        //     }
+        // }
     }
     const pickImage = async () => {
         try {
@@ -105,7 +129,7 @@ const CreateProduct = () => {
                 if (!result.canceled) {
                     await saveImage(result.assets[0])
                 }
-            }else {
+            } else {
                 setFormDataErrors(prevState => ({
                     ...prevState, image: 'Image size can not be more then 1048576 bytes'
                 }))
@@ -133,15 +157,19 @@ const CreateProduct = () => {
                 <CustomButton propStyles={styles.rowButtons} buttonText={'Update product'}
                               handle={() => setCreateOrUpdate('update')} fill={createOrUpdate !== 'update'}/>
             </View>
-            <FormElement validator={formDataErrors.name} textStyles={styles.text} handle={handleChange("name")} value={formData.name} title={'Name'}
+            <FormElement validator={formDataErrors.name} textStyles={styles.text} handle={handleChange("name")}
+                         value={formData.name} title={'Name'}
                          label={'Name'}/>
-            <FormElement validator={formDataErrors.description} textStyles={styles.text} handle={handleChange("description")} value={formData.description}
+            <FormElement validator={formDataErrors.description} textStyles={styles.text}
+                         handle={handleChange("description")} value={formData.description}
                          title={'Description'}
                          label={'Description'}/>
-            <FormElement validator={formDataErrors.categoryId} textStyles={styles.text} handle={handleChange("categoryId")} value={formData.categoryId}
+            <FormElement validator={formDataErrors.categoryId} textStyles={styles.text}
+                         handle={handleChange("categoryId")} value={formData.categoryId}
                          title={'Category ID'}
                          label={'Category ID'}/>
-            <FormElement validator={formDataErrors.price} textStyles={styles.text} handle={handleChange("price")} value={formData.price} title={'Price'}
+            <FormElement validator={formDataErrors.price} textStyles={styles.text} handle={handleChange("price")}
+                         value={formData.price} title={'Price'}
                          label={'Price'}/>
             {createOrUpdate === 'update' ?
                 <FormElement textStyles={styles.text} handle={text => setProductId(text)} value={productId}
@@ -158,7 +186,7 @@ const CreateProduct = () => {
                     value={newColor}
                     onChangeText={text => setNewColor(text)}
                     style={[styles.input, {width: '70%'}]}
-                    placeholderTextColor={'#fff'}
+                    placeholderTextColor={'#000'}
                 />
                 <CustomButton buttonText={'Add'} handle={addColor} propStyles={styles.microButton} fill={true}/>
             </View>
@@ -173,12 +201,13 @@ const CreateProduct = () => {
                     value={newSize}
                     onChangeText={text => setNewSize(text)}
                     style={[styles.input, {width: '70%'}]}
-                    placeholderTextColor={'#fff'}
+                    placeholderTextColor={'#000'}
                 />
                 <CustomButton buttonText={'Add'} handle={addSize} propStyles={styles.microButton} fill={true}/>
             </View>
             {formDataErrors.image && <Text>{formDataErrors.image}</Text>}
             <ImagePick image={image} pickImageHandler={pickImage}/>
+            {answerMessage && <Text>{answerMessage}</Text>}
             <View style={styles.row}>
                 <CustomButton propStyles={[styles.rowButtons, {backgroundColor: '#ABDD48', borderWidth: 0}]}
                               buttonText={'Submit'} handle={onSubmit} fill={false}/>
@@ -191,24 +220,26 @@ const CreateProduct = () => {
 
 const styles = StyleSheet.create({
     inputsWrapper: {
-        backgroundColor: '#5552FF',
+        // backgroundColor: '#5552FF',
         // flexDirection: "column",
         gap: 10,
         // alignItems: "flex-start",,
         padding: 10,
         marginBottom: 20,
-        borderRadius: 10
+        borderRadius: 10,
+        borderColor: '#D9D9D9',
+        borderWidth: 2
     },
     input: {
         width: '90%',
         height: 40,
         fontSize: 20,
         fontWeight: '500',
-        borderColor: '#fff',
+        borderColor: '#000',
         borderWidth: 2,
         padding: 5,
         borderRadius: 5,
-        color: '#fff'
+        color: '#000'
     },
     row: {
         flexDirection: "row",
@@ -218,7 +249,7 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 20,
         fontWeight: '500',
-        color: '#fff',
+        color: '#000',
         textAlign: "left",
         width: '90%'
     },

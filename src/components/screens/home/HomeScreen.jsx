@@ -3,9 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {getProductsSelector, setProducts} from "../../../redux/reducers/productsReducer";
 import {useEffect} from "react";
 import {getAllProducts} from "../../../api/productsApi";
-import PaginatorView from "./Paginator/PaginatorView";
 import FilterAndSorting from "./FilterAndSorting/FilterAndSorting";
-import {getIsAuth} from "../../../redux/reducers/authReducer";
 
 const HomeScreen = () => {
         const dispatch = useDispatch()
@@ -20,8 +18,8 @@ const HomeScreen = () => {
         return (
             <View style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}
-                            contentContainerStyle={{rowGap: 25, paddingBottom: 200, paddingTop: 50}} alignItems='column'
-                            style={styles.column}>
+                            contentContainerStyle={styles.column}
+                            >
                     <FilterAndSorting initialProducts={products}/>
                     {/*<PaginatorView items={products}/>*/}
                 </ScrollView>
@@ -44,9 +42,12 @@ const styles = StyleSheet.create({
     },
     column: {
         width: '80%',
-        rowGap: 20,
+        rowGap: 25,
         backgroundColor: "#E8EBEE",
-        flex: 1,
+        gap: 25,
+        paddingBottom: 200,
+        paddingTop: 50
+        // flex: 1,
         // paddingBottom: 200
     },
 });

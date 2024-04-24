@@ -1,6 +1,4 @@
 import {Image, Pressable, StyleSheet, Text, View} from "react-native";
-import CustomButton from "../../reused/CustomButton";
-import {useState} from "react";
 import {useNavigation} from "@react-navigation/native";
 import {AntDesign} from "@expo/vector-icons";
 
@@ -10,7 +8,7 @@ const CategoryDescription = ({name, description, id, image}) => {
         <View style={styles.column}>
         <Pressable onPress={()=>navigation.navigate('CategoryScreen', {category: name})} style={[styles.row, styles.bottomLine]}>
             <View>
-                <Image resizeMethod={'resize'} style={styles.img} source={{uri:image.url}}/>
+                {image && <Image resizeMethod={'resize'} style={styles.img} source={{uri: image.url}}/>}
             </View>
             <View style={styles.textWrapper}>
                 <Text style={styles.description}>{description}</Text>

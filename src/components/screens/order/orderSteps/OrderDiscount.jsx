@@ -31,7 +31,6 @@ const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
         }
         if (valid) {
             const res = await getDiscountByName(discountCode)
-            console.log(res)
             if (res.code === '404') {
                 setSuccessTry('wrong')
                 setDiscountCodeValue('')

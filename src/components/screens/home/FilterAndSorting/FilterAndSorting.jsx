@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {filterProducts, searchProducts, sortByOrder} from "../../../../helpFunctions/SortingProducts";
 import PaginatorView from "../Paginator/PaginatorView";
 import PageSizeSelector from "../Paginator/PageSizeSelector";
@@ -7,7 +7,6 @@ import {AntDesign} from "@expo/vector-icons";
 import CustomButton from "../../../reused/CustomButton";
 import {useSelector} from "react-redux";
 import {getProductsSelector} from "../../../../redux/reducers/productsReducer";
-import GoBackButton from "../../../navigation/GoBackButton";
 
 const FilterAndSorting = ({initialProducts}) => {
     const prodRed = useSelector(getProductsSelector)
@@ -40,7 +39,7 @@ const FilterAndSorting = ({initialProducts}) => {
         setFilteredProducts(prodRed)
     }
     return (
-        <View>
+        <View style={{gap: 20}}>
             <View style={[styles.advancedSettings, showAdvancedSettings && styles.advancedSettingsVisible]}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TextInput

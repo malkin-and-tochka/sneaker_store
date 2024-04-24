@@ -29,7 +29,6 @@ const UserOrderScreen = (props) => {
         price={prod.price}
         img={prod.imageResponseList[0].url}
     />)
-    console.log(discountCode)
     return (
         <ScrollView showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingBottom: 200, paddingTop: 20, alignItems: 'center', rowGap: 10}}

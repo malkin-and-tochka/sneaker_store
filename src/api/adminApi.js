@@ -3,7 +3,7 @@ import AuthManager from "./axiosManagers/authManager";
 export const postProduct = async ({name, description, categoryId, price, colors, sizes}) => {
     try {
         const res = await AuthManager.post('/admin/product', {name, description, categoryId, price, colors, sizes})
-        return res.data.id
+        return res.data
     } catch (e) {
         console.log(e.response.data)
         return e.response.data
@@ -39,18 +39,18 @@ export const postProductImage = async (multipartFile, config) => {
 export const postCategory = async (name, description) => {
     try {
         const res = await AuthManager.post('/admin/category', {"name": name, "description": description})
-        console.log(res)
-        return res
+        return res.data
     } catch (e) {
-        console.log(e)
+        console.log(e.response.data)
+        return e.response.data
     }
 }
 
-export const postCategoryImage = async (img, isPrime, productId) => {
+export const postCategoryImage = async (multipartFile, config) => {
     try {
-        const res = await AuthManager.post('/admin/category/img', {multipartFile: img, isPrime, id: productId})
-        console.log(res)
-        return res
+        const res = await AuthManager.post('/admin/category/img', multipartFile, config)
+        console.log('post image answer', res)
+        return res.status
     } catch (e) {
         console.log(e)
     }

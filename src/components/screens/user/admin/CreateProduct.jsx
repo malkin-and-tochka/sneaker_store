@@ -1,14 +1,11 @@
 import {useState} from 'react';
-import {postProduct, postProductImage} from "../../../../api/adminApi";
-import * as ImagePicker from "expo-image-picker";
-import * as FileSystem from 'expo-file-system'
+import {postProduct, postProductImage, updateProduct} from "../../../../api/adminApi";
 import {StyleSheet, Text, TextInput, View} from "react-native";
 import FormElement from "./FormElement";
 import CustomButton from "../../../reused/CustomButton";
 import ImagePick from "./ImagePick";
+import {prepareImg} from "../../../../helpFunctions/prepareImageToRequest";
 
-const FormData = global.FormData
-const getFileInfo = async (fileURI) => await FileSystem.getInfoAsync(fileURI)
 
 const CreateProduct = () => {
     const [formData, setFormData] = useState({
@@ -26,7 +23,8 @@ const CreateProduct = () => {
         price: '',
         colors: '',
         sizes: '',
-        image: ''
+        image: '',
+        productId: ''
     });
     const [newSize, setNewSize] = useState()
     const [newColor, setNewColor] = useState()
@@ -34,13 +32,6 @@ const CreateProduct = () => {
     const [createOrUpdate, setCreateOrUpdate] = useState('create')
     const [productId, setProductId] = useState('')
     const [answerMessage, setAnswerMessage] = useState('')
-    const saveImage = async image => {
-        try {
-            setImage(image)
-        } catch (e) {
-            console.log(e)
-        }
-    }
     const addSize = () => {
         if (newSize) {
             setFormData({...formData, sizes: [...formData.sizes, newSize]})
@@ -65,77 +56,46 @@ const CreateProduct = () => {
             price: '',
             colors: '',
             sizes: '',
-            image: ''
+            image: '',
+            productId: ''
         })
-        // if (createOrUpdate === 'create') {
-            if (formData.name.length === 0 || formData.name.length > 120) {
-                valid = false
-                setFormDataErrors(prevState => ({...prevState, name: 'Size has to be between 1 and 120'}))
-            }
-            if (formData.description.length === 0 || formData.description.length > 1200) {
-                valid = false
-                setFormDataErrors(prevState => ({...prevState, description: 'Size has to be between 1 and 1200'}))
-            }
-            if (formData.price.length === 0) {
-                valid = false
-                setFormDataErrors(prevState => ({...prevState, price: 'Null not allowed'}))
-            }
-            if (formData.categoryId.length === 0) {
-                valid = false
-                setFormDataErrors(prevState => ({...prevState, categoryId: 'Null not allowed'}))
-            }
+        if (formData.name.length === 0 || formData.name.length > 120) {
+            valid = false
+            setFormDataErrors(prevState => ({...prevState, name: 'Size has to be between 1 and 120'}))
+        }
+        if (formData.description.length === 0 || formData.description.length > 1200) {
+            valid = false
+            setFormDataErrors(prevState => ({...prevState, description: 'Size has to be between 1 and 1200'}))
+        }
+        if (formData.price.length === 0) {
+            valid = false
+            setFormDataErrors(prevState => ({...prevState, price: 'Null not allowed'}))
+        }
+        if (formData.categoryId.length === 0) {
+            valid = false
+            setFormDataErrors(prevState => ({...prevState, categoryId: 'Null not allowed'}))
+        }
+        if (createOrUpdate === 'update' && productId === '') {
+            valid = false
+            setFormDataErrors(prevState => ({...prevState, productId: 'Null not allowed'}))
+        }
+        if (createOrUpdate === 'create') {
             if (valid) {
                 const productCode = await postProduct({...formData})
-                console.log('attention', productCode)
+
                 if (productCode.code === '400') {
                     setAnswerMessage("Request body is missing")
                 } else {
-                    const formImageData = new FormData()
-                    formImageData.append(`multipartFile`, {
-                        uri: image.uri,
-                        type: image.mimeType,
-                        name: 'testFile'
-                    })
-                    formImageData.append('isPrime', true)
-                    formImageData.append('id', productCode)
-                    const config = {
-                        headers: {
-                            'accept': 'application/json',
-                            'Content-Type': 'multipart/form-data',
-                        }
-                    }
+                    const [formImageData, config] = prepareImg(image, productCode.id)
                     const imageRes = await postProductImage(formImageData, config)
+                    if (imageRes) {
+                        setAnswerMessage('Product was created')
+                    }
                 }
+            } else if (valid) {
+                const res = await updateProduct({...formData, productId})
             }
-        // } else {
-        //     if (formData.colors.length && formData.sizes.length && formData.name && formData.price && formData.categoryId && formData.description && productId) {
-        //         const res = await updateProduct({...formData, productId})
-        //         setValidator(true)
-        //     } else {
-        //         setValidator(false)
-        //     }
-        // }
-    }
-    const pickImage = async () => {
-        try {
-            await ImagePicker.requestMediaLibraryPermissionsAsync()
-            const result = await ImagePicker.launchImageLibraryAsync({
-                mediaTypes: ImagePicker.MediaTypeOptions.Images,
-                allowsEditing: true,
-                quality: 1
-            })
-            const imgInfo = await getFileInfo(result.assets[0].uri)
-            if (imgInfo.size <= 1048576) {
-                if (!result.canceled) {
-                    await saveImage(result.assets[0])
-                }
-            } else {
-                setFormDataErrors(prevState => ({
-                    ...prevState, image: 'Image size can not be more then 1048576 bytes'
-                }))
-            }
-        } catch (e) {
-            console.log(e)
+
         }
     }
     const clearAllFields = () => {
@@ -172,7 +132,8 @@ const CreateProduct = () => {
                          value={formData.price} title={'Price'}
                          label={'Price'}/>
             {createOrUpdate === 'update' ?
-                <FormElement textStyles={styles.text} handle={text => setProductId(text)} value={productId}
+                <FormElement validator={formDataErrors.productId} textStyles={styles.text}
+                             handle={text => setProductId(text)} value={productId}
                              title={'Product Id'}
                              label={'Product Id'}/> : null}
             <Text style={styles.text}>
@@ -206,7 +167,7 @@ const CreateProduct = () => {
                 <CustomButton buttonText={'Add'} handle={addSize} propStyles={styles.microButton} fill={true}/>
             </View>
             {formDataErrors.image && <Text>{formDataErrors.image}</Text>}
-            <ImagePick image={image} pickImageHandler={pickImage}/>
+            <ImagePick image={image} setImage={setImage} setFormDataErrors={setFormDataErrors}/>
             {answerMessage && <Text>{answerMessage}</Text>}
             <View style={styles.row}>
                 <CustomButton propStyles={[styles.rowButtons, {backgroundColor: '#ABDD48', borderWidth: 0}]}
@@ -215,8 +176,9 @@ const CreateProduct = () => {
                               buttonText={'Clear all'} handle={clearAllFields} fill={false}/>
             </View>
         </View>
-    );
-};
+    )
+}
+
 
 const styles = StyleSheet.create({
     inputsWrapper: {

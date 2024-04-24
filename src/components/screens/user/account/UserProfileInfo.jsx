@@ -44,24 +44,35 @@ const UserProfileInfo = () => {
     const handleFirstNameChange = (text) => setNewInfo((prevInfo) => ({...prevInfo, firstName: text}));
 
     const handleSave = async () => {
-        if (JSON.stringify(accountInfo) === JSON.stringify(newInfo)) {
-            setEditMode(false);
-            return
-        }
         setNewInfoErrors({
             mobilePhone: '',
             lastName: '',
             firstName: ''
         })
-        const res = await updateAccountData(newInfo.firstName, newInfo.lastName, newInfo.mobilePhone)
-        if (res.code === '400'){
-            setNewInfoErrors(prevState => ({...prevState, ...res.value}))
-        } else {
-            dispatch(setFirstName(newInfo.firstName));
-            dispatch(setLastName(newInfo.lastName));
-            dispatch(setEmail(newInfo.email));
-            dispatch(setMobilePhone(newInfo.mobilePhone));
+        let valid = true
+        if (JSON.stringify(accountInfo) === JSON.stringify(newInfo)) {
             setEditMode(false);
+            valid = false
+        }
+        if (newInfo.firstName.length === 0 || newInfo.firstName.length > 120) {
+            setNewInfoErrors(prevState => ({...prevState, firstName: 'Size has to be between 1 and 120'}))
+            valid = false
+        }
+        if (newInfo.lastName.length === 0 || newInfo.lastName.length > 120) {
+            setNewInfoErrors(prevState => ({...prevState, lastName: 'Size has to be between 1 and 120'}))
+            valid = false
+        }
+        if (valid) {
+            const res = await updateAccountData(newInfo.firstName, newInfo.lastName, newInfo.mobilePhone)
+            if (res.code === '400'){
+                setNewInfoErrors(prevState => ({...prevState, ...res.value}))
+            } else {
+                dispatch(setFirstName(newInfo.firstName));
+                dispatch(setLastName(newInfo.lastName));
+                dispatch(setEmail(newInfo.email));
+                dispatch(setMobilePhone(newInfo.mobilePhone));
+                setEditMode(false);
+            }
         }
     };
     return (

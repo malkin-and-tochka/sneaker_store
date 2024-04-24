@@ -3,9 +3,10 @@ import AuthManager from "./axiosManagers/authManager";
 export const postProduct = async ({name, description, categoryId, price, colors, sizes}) => {
     try {
         const res = await AuthManager.post('/admin/product', {name, description, categoryId, price, colors, sizes})
-        return res
+        return res.data.id
     } catch (e) {
-        console.log('post error:    ', e)
+        console.log(e.response.data)
+        return e.response.data
     }
 }
 export const updateProduct = async ({name, description, categoryId, price, colors, sizes, id}) => {
@@ -30,9 +31,9 @@ export const deleteProduct = async (id) => {
 export const postProductImage = async (multipartFile, config) => {
     try {
         const res = await AuthManager.post('/admin/product/img', multipartFile, config)
-        return res
+        return res.status
     } catch (e) {
-        console.log(e)
+        console.log(e.response.data)
     }
 }
 export const postCategory = async (name, description) => {

@@ -22,6 +22,7 @@ authManager.interceptors.response.use(
     async (error) => {
         try {
             const originalRequest = error.config
+            console.log('INTERCEPTOR ========    ',error.response.data)
             if (error.response.status === 401 && !originalRequest._retry) {
                 originalRequest._retry = true;
                 const tokens = await refresh();
@@ -29,6 +30,7 @@ authManager.interceptors.response.use(
                 await setRefreshToken(tokens.refreshToken)
                 return authManager(originalRequest)
             }
+            return Promise.reject(error);
         } catch (e) {
             console.log(e)
         }

@@ -1,12 +1,14 @@
 import {useState} from 'react';
 import {postProduct, postProductImage, updateProduct} from "../../../../api/adminApi";
 import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from 'expo-file-system'
 import {StyleSheet, Text, TextInput, View} from "react-native";
 import FormElement from "./FormElement";
 import CustomButton from "../../../reused/CustomButton";
 import ImagePick from "./ImagePick";
 
 const FormData = global.FormData
+const getFileInfo = async (fileURI) => await FileSystem.getInfoAsync(fileURI)
 
 const CreateProduct = () => {
     const [formData, setFormData] = useState({
@@ -16,6 +18,15 @@ const CreateProduct = () => {
         price: "",
         colors: [],
         sizes: [],
+    });
+    const [formDataErrors, setFormDataErrors] = useState({
+        name: '',
+        description: '',
+        categoryId: '',
+        price: '',
+        colors: '',
+        sizes: '',
+        image: ''
     });
     const [newSize, setNewSize] = useState()
     const [newColor, setNewColor] = useState()
@@ -87,11 +98,17 @@ const CreateProduct = () => {
             const result = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
-                aspect: [1, 1],
                 quality: 1
             })
-            if (!result.canceled) {
-                await saveImage(result.assets[0])
+            const imgInfo = await getFileInfo(result.assets[0].uri)
+            if (imgInfo.size <= 1048576) {
+                if (!result.canceled) {
+                    await saveImage(result.assets[0])
+                }
+            }else {
+                setFormDataErrors(prevState => ({
+                    ...prevState, image: 'Image size can not be more then 1048576 bytes'
+                }))
             }
         } catch (e) {
             console.log(e)
@@ -116,14 +133,19 @@ const CreateProduct = () => {
                 <CustomButton propStyles={styles.rowButtons} buttonText={'Update product'}
                               handle={() => setCreateOrUpdate('update')} fill={createOrUpdate !== 'update'}/>
             </View>
-            <FormElement textStyles={styles.text} handle={handleChange("name")} value={formData.name} title={'Name'} label={'Name'}/>
-            <FormElement textStyles={styles.text} handle={handleChange("description")} value={formData.description} title={'Description'}
+            <FormElement validator={formDataErrors.name} textStyles={styles.text} handle={handleChange("name")} value={formData.name} title={'Name'}
+                         label={'Name'}/>
+            <FormElement validator={formDataErrors.description} textStyles={styles.text} handle={handleChange("description")} value={formData.description}
+                         title={'Description'}
                          label={'Description'}/>
-            <FormElement textStyles={styles.text} handle={handleChange("categoryId")} value={formData.categoryId} title={'Category ID'}
+            <FormElement validator={formDataErrors.categoryId} textStyles={styles.text} handle={handleChange("categoryId")} value={formData.categoryId}
+                         title={'Category ID'}
                          label={'Category ID'}/>
-            <FormElement textStyles={styles.text} handle={handleChange("price")} value={formData.price} title={'Price'} label={'Price'}/>
+            <FormElement validator={formDataErrors.price} textStyles={styles.text} handle={handleChange("price")} value={formData.price} title={'Price'}
+                         label={'Price'}/>
             {createOrUpdate === 'update' ?
-                <FormElement textStyles={styles.text} handle={text => setProductId(text)} value={productId} title={'Product Id'}
+                <FormElement textStyles={styles.text} handle={text => setProductId(text)} value={productId}
+                             title={'Product Id'}
                              label={'Product Id'}/> : null}
             <Text style={styles.text}>
                 Colors: {formData.colors.map((el, index) => index + 1 !== formData.colors.length ?
@@ -155,8 +177,8 @@ const CreateProduct = () => {
                 />
                 <CustomButton buttonText={'Add'} handle={addSize} propStyles={styles.microButton} fill={true}/>
             </View>
+            {formDataErrors.image && <Text>{formDataErrors.image}</Text>}
             <ImagePick image={image} pickImageHandler={pickImage}/>
-            {validator && <Text style={styles.error}>Please, check the valid values of the fields</Text>}
             <View style={styles.row}>
                 <CustomButton propStyles={[styles.rowButtons, {backgroundColor: '#ABDD48', borderWidth: 0}]}
                               buttonText={'Submit'} handle={onSubmit} fill={false}/>

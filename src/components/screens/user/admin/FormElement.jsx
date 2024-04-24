@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         gap: 5,
     },
     input: {
-        width: '100%',
+        minWidth: '100%',
         height: 40,
         fontSize: 20,
         fontWeight: '500',
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#100F14',
         textAlign: "left",
-        width: '90%'
+        minWidth: '90%'
     },
     validator: {
         position: "absolute",

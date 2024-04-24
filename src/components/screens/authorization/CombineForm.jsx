@@ -1,11 +1,20 @@
 import {View, StyleSheet, TouchableOpacity, Text, ScrollView} from "react-native";
-import {useState} from "react";
-import {login, register} from "../../../api/authApi";
+import {useEffect, useState} from "react";
+import {login, refresh, register} from "../../../api/authApi";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import GoBackButton from "../../navigation/GoBackButton";
+import {useDispatch} from "react-redux";
+import {setAuth} from "../../../redux/reducers/authReducer";
 
 const CombineForm = () => {
+    // const dispatch = useDispatch()
+    // useEffect(() => {
+    //     (async ()=>{
+    //         const res = await refresh()
+    //         if (res) dispatch(setAuth(true))
+    //     })()
+    // }, []);
     const [loginOrRegister, setLoginOrRegister] = useState('login')
     return (
         <View style={styles.highWrapper}>

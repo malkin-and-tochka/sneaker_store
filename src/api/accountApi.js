@@ -19,9 +19,9 @@ export const getAccountRoles = async () => {
 export const updateAccountData = async (firstName, lastName, mobilePhone) => {
     try {
         const res = await authManager.put('/account/update', {firstName, lastName, mobilePhone})
-        console.log('new account data    ==== >', res.data)
         return res.data
     } catch (e) {
-        console.log(e)
+        console.log(e.response.data)
+        return e.response.data
     }
 }

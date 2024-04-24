@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {ScrollView, StyleSheet, Text, View} from "react-native";
 import GoBackButton from "../../../navigation/GoBackButton";
 import CustomButton from "../../../reused/CustomButton";
@@ -7,9 +7,7 @@ import NextStepButton from "./NextStepButton";
 import {getDiscountByName} from "../../../../api/orderApi";
 import {useDispatch, useSelector} from "react-redux";
 import {
-    getTempAddress,
     getTempDiscount,
-    getTempOrder,
     setOrderDiscountCode, setOrderDiscountCodeName
 } from "../../../../redux/reducers/tempOrderReducer";
 
@@ -23,7 +21,7 @@ const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
     const checkTheDiscountCode = async () => {
         setIsValid(true)
         let valid = true
-        if (discountCode.length < 5 || discountCode > 12) {
+        if (discountCode.length < 5 || discountCode.length > 12) {
             valid = false
             setIsValid(false)
         }
@@ -33,22 +31,26 @@ const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
         }
         if (valid) {
             const res = await getDiscountByName(discountCode)
-            if (res) {
+            console.log(res)
+            if (res.code === '404') {
+                setSuccessTry('wrong')
+                setDiscountCodeValue('')
+            } else {
                 setDiscountCodeValue(res.discountPrice)
                 setSuccessTry('success')
-            } else {
-                setSuccessTry('wrong')
             }
         }
     }
-    const setOrderDiscountCodeHandler = () => {
-        if (successTry === 'success') {
+    const setOrderDiscountCodeHandler = async () => {
+        const res = await getDiscountByName(discountCode)
+        if (res.discountPrice) {
+            setDiscountCodeValue(res.discountPrice)
             dispatch(setOrderDiscountCode(discountCode, discountCodeValue))
         }
     }
-    const combineHandlers = () => {
+    const combineHandlers = async () => {
         nextButtonHandler()
-        setOrderDiscountCodeHandler()
+        await setOrderDiscountCodeHandler()
     }
     return (
         <ScrollView showsVerticalScrollIndicator={false}

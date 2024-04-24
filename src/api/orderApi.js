@@ -64,5 +64,6 @@ export const getDiscountByName = async (name) => {
         return res.data
     } catch (e) {
         console.log('request ', e)
+        return e.response.data
     }
 }

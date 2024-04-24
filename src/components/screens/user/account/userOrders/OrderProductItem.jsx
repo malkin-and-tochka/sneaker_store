@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     },
     imageWrapper: {
         height: 100,
-        width: 160,
+        width: 140,
         maxWidth: '50%'
     },
     text: {
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         fontWeight: '500'
     },
     price: {
-        fontSize: 24,
+        fontSize: 20,
         textAlign: "center",
         fontWeight: '500'
     },

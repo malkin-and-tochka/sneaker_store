@@ -78,25 +78,19 @@ const FilterAndSorting = ({initialProducts}) => {
                                        inputMode={"numeric"} keyboardType="numeric"/>
                         </View>
                         <View style={styles.row}>
-                            <Text style={styles.text}>Sort by: </Text>
-                            <CustomButton propStyles={{padding: 5}} handle={() => setAscending(true)}
+                            <Text style={[styles.text, {maxWidth: '25%'}]}>Sort by: </Text>
+                            <CustomButton propStyles={{padding: 5, maxWidth: '40%'}} handle={() => setAscending(true)}
                                           buttonText={'increasing'} fill={ascending}/>
-                            <CustomButton handle={() => setAscending(false)} buttonText={'decreasing'}
+                            <CustomButton propStyles={{padding: 5, maxWidth: '40%'}} handle={() => setAscending(false)} buttonText={'decreasing'}
                                           fill={!ascending}/>
                         </View>
                         <View style={styles.row}>
                             <CustomButton propStyles={{
-                                backgroundColor: '#FDC467',
-                                borderWidth: 0,
-                                borderRadius: 15,
                                 width: '40%'
-                            }} buttonText={'Clear'} handle={clearFilters}/>
+                            }} buttonText={'Clear'} handle={clearFilters} fill={true}/>
                             <CustomButton propStyles={{
-                                backgroundColor: '#ABDD48',
-                                borderWidth: 0,
-                                borderRadius: 15,
                                 width: '40%'
-                            }} buttonText={'Search'} handle={handleFilterAndSort}/>
+                            }} buttonText={'Search'} handle={handleFilterAndSort} fill={true}/>
                         </View>
                     </View>}
             </View>

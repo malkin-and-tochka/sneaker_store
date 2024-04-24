@@ -18,7 +18,7 @@ const initialState = {
     address: '',
     customerNotes: '',
     discountCodeName: '',
-    shippingType: 'SELF_PICK_UP',
+    shippingType: 'DELIVERY_BY_COURIER',
     paymentDetailsRequest: {
         cardNumber: '',
         validFor: '',

@@ -9,6 +9,7 @@ import {
     setOrderAddress, setOrderAddressData, setOrderCustomerNotes, setOrderShipping,
 } from "../../../../redux/reducers/tempOrderReducer";
 import {useDispatch, useSelector} from "react-redux";
+import AddressInput from "./AddressInput";
 
 const OrderAddress = ({nextButtonHandler}) => {
     const {address, shippingType, customerNotes} = useSelector(getTempAddress)
@@ -36,14 +37,21 @@ const OrderAddress = ({nextButtonHandler}) => {
             <Text style={styles.inputsNames}>Shipping Type:</Text>
             <View style={[styles.row, {width: '70%', gap: 0}]}>
                 <CustomButton propStyles={styles.rowButtons} buttonText={'Pickup'}
-                              handle={() => setShippingType('SELF_PICK_UP')} fill={shippingType !== 'SELF_PICK_UP'}/>
+                              handle={() => setShippingType('SELF_PICK_UP')} fill={shippingType === 'SELF_PICK_UP'}/>
                 <CustomButton propStyles={styles.rowButtons} buttonText={'Delivery'}
-                              handle={() => setShippingType('DELIVERY_BY_COURIER ')}
-                              fill={shippingType !== 'DELIVERY_BY_COURIER '}/>
+                              handle={() => setShippingType('DELIVERY_BY_COURIER')}
+                              fill={shippingType === 'DELIVERY_BY_COURIER'}/>
             </View>
-            <FormElement validatorStyles={{color: isValid ? '#000' : 'red'}} validator={'Size between 10 and 120'} inputStyles={{borderColor: '#000', color: '#000'}} placeholderColor='#000' handle={(text) => setAddress(text)} value={address}
-                         title={shippingType === 'SELF_PICK_UP' ? 'Store address' : 'Your address'} label={'Address'}/>
-            <FormElement inputStyles={{borderColor: '#000', color: '#000'}} placeholderColor='#000' handle={(text) => setCustomerNotes(text)} value={customerNotes}
+            {shippingType === 'DELIVERY_BY_COURIER' ?
+                <FormElement validatorStyles={{color: isValid ? '#000' : 'red'}} validator={'Size between 10 and 120'}
+                             inputStyles={{borderColor: '#000', color: '#000'}} placeholderColor='#000'
+                             handle={(text) => setAddress(text)} value={address}
+                             title={shippingType === 'SELF_PICK_UP' ? 'Store address' : 'Your address'}
+                             label={'Address'}/>
+                :
+                <AddressInput address={address} setAddress={setAddress}/>}
+            <FormElement inputStyles={{borderColor: '#000', color: '#000'}} placeholderColor='#000'
+                         handle={(text) => setCustomerNotes(text)} value={customerNotes}
                          title={'Customer Notes'} label={'Customer Notes'}/>
             <View style={styles.row}>
                 <GoBackButton/>

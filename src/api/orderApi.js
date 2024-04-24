@@ -40,6 +40,7 @@ export const postOrder = async ({
     } catch (e) {
         // console.log('requestSSS ', e.message)
         console.log('requestSSS ', e.response.data)
+        return e.response.data
     }
 }
 export const getOrderById = async (id) => {
@@ -63,7 +64,7 @@ export const getDiscountByName = async (name) => {
         const res = await authManager.get(`/orders/discountCode/${name}`)
         return res.data
     } catch (e) {
-        console.log('request ', e)
+        console.log('request ', e.response.data)
         return e.response.data
     }
 }

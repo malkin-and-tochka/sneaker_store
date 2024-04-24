@@ -1,6 +1,6 @@
 import {useState} from 'react';
 import {postProduct, postProductImage, updateProduct} from "../../../../api/adminApi";
-import {Pressable, ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
+import {ScrollView, StyleSheet, Text, TextInput, View} from "react-native";
 import FormElement from "./FormElement";
 import CustomButton from "../../../reused/CustomButton";
 import ImagePick from "./ImagePick";
@@ -18,7 +18,7 @@ const CreateProduct = () => {
         price: "",
         colors: [],
         sizes: [],
-    });
+    })
     const [formDataErrors, setFormDataErrors] = useState({
         name: '',
         description: '',
@@ -28,7 +28,7 @@ const CreateProduct = () => {
         sizes: '',
         image: '',
         productId: ''
-    });
+    })
     const [newSize, setNewSize] = useState()
     const [newColor, setNewColor] = useState()
     const [image, setImage] = useState()
@@ -36,14 +36,12 @@ const CreateProduct = () => {
     const [productId, setProductId] = useState('')
     const [answerMessage, setAnswerMessage] = useState('')
     const addSize = () => {
-        if (newSize) {
+        setFormDataErrors(prevState => ({...prevState, sizes: ''}))
+        if (newSize <= 50 && newSize > 0) {
             setFormData({...formData, sizes: [...formData.sizes, newSize]})
             setNewSize('')
-        }
-    }
-    const addColor = () => {
-        if (newColor) {
-            setFormData(prevState => ({...prevState, colors: [...prevState.colors, newColor]}))
+        } else {
+            setFormDataErrors(prevState => ({...prevState, sizes: 'Not allow more than 50'}))
         }
     }
     const toggleColor = (color) => {
@@ -54,7 +52,6 @@ const CreateProduct = () => {
         setFormData({...formData, [field]: value});
     };
     const onSubmit = async () => {
-        console.log(formData)
         let valid = true
         setFormDataErrors({
             name: '',
@@ -82,6 +79,11 @@ const CreateProduct = () => {
             valid = false
             setFormDataErrors(prevState => ({...prevState, categoryId: 'Null not allowed'}))
         }
+        // if (formData.sizes.length !== 0) {
+        //
+        //     valid = false
+        //     setFormDataErrors(prevState => ({...prevState, categoryId: 'Null not allowed'}))
+        // }
         if (createOrUpdate === 'update' && productId === '') {
             valid = false
             setFormDataErrors(prevState => ({...prevState, productId: 'Null not allowed'}))
@@ -154,6 +156,7 @@ const CreateProduct = () => {
                 Sizes: {formData.sizes.map((el, index) => index + 1 !== formData.sizes.length ?
                 <Text key={el} id={el}>{el}, </Text> : <Text key={el} id={el}>{el}</Text>)}
             </Text>
+            {formDataErrors.sizes && <Text style={styles.error}>{formDataErrors.sizes}</Text>}
             <View style={styles.row}>
                 <TextInput
                     label="Size"
@@ -224,10 +227,9 @@ const styles = StyleSheet.create({
         width: '45%'
     },
     error: {
-        fontSize: 20,
-        fontWeight: '500',
+        fontSize: 16,
         color: 'red'
-    }
+    },
 });
 
 export default CreateProduct;

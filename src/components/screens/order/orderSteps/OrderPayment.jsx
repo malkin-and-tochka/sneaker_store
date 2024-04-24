@@ -12,6 +12,7 @@ import {
     setOrderPayment, setOrderPaymentCardNumber, setOrderPaymentCvv, setOrderPaymentValid
 } from "../../../../redux/reducers/tempOrderReducer";
 import {postOrder} from "../../../../api/orderApi";
+import {roundNumber} from "../../../../helpFunctions/round";
 
 const OrderPayment = ({prevButtonHandler}) => {
     const {cardNumber, validFor, cvv} = useSelector(getTempOrderPayment)
@@ -24,7 +25,8 @@ const OrderPayment = ({prevButtonHandler}) => {
         cvv: ""
     });
     const [isValid, setIsValid] = useState(true)
-    const [status, setStatus] = useState(0)
+    const [statusValue, setStatus] = useState('')
+    const [answer, setAnswer] = useState('')
     const totalPrice = useSelector(getTotalPrice)
     const dispatch = useDispatch()
     const orderState = useSelector(getTempOrder)
@@ -44,7 +46,8 @@ const OrderPayment = ({prevButtonHandler}) => {
         setCardNumber(newText);
     }
     const Submit = async () => {
-        setStatus(0)
+        setAnswer('')
+        setStatus('')
         setPaymentErrors({
             cardNumber: "",
             validFor: "",
@@ -85,12 +88,15 @@ const OrderPayment = ({prevButtonHandler}) => {
                 cvv: ""
             })
             setStatus(status)
-            if (status === 201) {
+            if (status === '201') {
                 setCardNumber('')
                 setValidData('')
                 setCvv('')
                 dispatch(resetCart())
                 dispatch(resetTempOrder())
+            }
+            if (status === '400') {
+                setAnswer('Please, check the precious data fields')
             }
         }
     }
@@ -105,7 +111,6 @@ const OrderPayment = ({prevButtonHandler}) => {
                         style={styles.input}
                         value={cardNumber}
                         onChangeText={cardHandler}
-                        // keyboardType="numeric"
                         placeholder={'**** **** **** ****'}
                         placeholderTextColor={'#FDFFFA'}
                         maxLength={19}
@@ -140,9 +145,10 @@ const OrderPayment = ({prevButtonHandler}) => {
                     </View>
                 </View>
             </View>
+            {answer && <Text style={styles.error}>{answer}</Text>}
             <View style={styles.row}>
                 <GoBackButton handler={prevButtonHandler}/>
-                {status === 201 ?
+                {statusValue === 201 ?
                     <CustomButton fill={false} propStyles={{
                         minHeight: discountValue ? 150 : 100,
                         minWidth: 100,
@@ -169,7 +175,7 @@ const OrderPayment = ({prevButtonHandler}) => {
                     }}>
                         {discountValue ?
                             <Text
-                                style={{fontSize: 25, textDecorationLine: 'line-through'}}>${totalPrice}
+                                style={{fontSize: 25, textDecorationLine: 'line-through'}}>${roundNumber(totalPrice)}
                             </Text>
                             :
                             null

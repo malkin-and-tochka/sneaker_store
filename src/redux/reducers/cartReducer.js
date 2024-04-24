@@ -26,7 +26,6 @@ export const cartReducer = (state = initialState, action) => {
         }
         case REMOVE_FROM_CART: {
             const newCartList = state.cartList.filter((item) => {
-                console.log(!(item.product.id === action.productId && item.color === action.color && item.size === action.size))
                 return !(item.product.id === action.productId && item.color === action.color && item.size === action.size)
             });
             const removedProduct = state.cartList.find((item) => item.product.id === action.productId && item.color === action.color && item.size === action.size);

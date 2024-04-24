@@ -1,5 +1,4 @@
 import {StatusBar, StyleSheet, View} from 'react-native';
-import Header from './src/components/reused/Header';
 import {Provider} from "react-redux";
 import {store} from "./src/redux/store";
 import Navigation from "./src/components/navigation/Navigation";

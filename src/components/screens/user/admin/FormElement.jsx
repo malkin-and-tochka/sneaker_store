@@ -36,19 +36,21 @@ const styles = StyleSheet.create({
         color: '#000'
     },
     text: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '500',
         color: '#100F14',
         textAlign: "left",
-        maxWidth: '50%',
+        maxWidth: '40%',
     },
     validator: {
         position: "absolute",
         right: 0,
         top: 5,
         fontWeight: '500',
-        maxWidth: '50%',
-        fontSize: 10
+        maxWidth: '60%',
+        fontSize: 12,
+        color: 'red',
+        textAlign: 'right'
     }
 });
 export default FormElement;

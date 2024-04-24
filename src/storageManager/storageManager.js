@@ -13,8 +13,3 @@ export const deleteTokens = async () => {
     await setAccessToken('')
     await setRefreshToken('')
 }
-
-export const checkIsAccessTokenExist = async () => {
-    const token = await getAccessToken()
-    return !!token
-}

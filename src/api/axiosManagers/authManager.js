@@ -3,7 +3,6 @@ import {refresh} from "../authApi";
 import {getAccessToken, setAccessToken, setRefreshToken} from "../../storageManager/storageManager";
 import {IP_ADDRESS} from "../../constants";
 
-
 const authManager = axios.create({
     baseURL: `http://${IP_ADDRESS}:8080/sneakersShop/`,
     withCredentials: true,
@@ -22,7 +21,6 @@ authManager.interceptors.response.use(
     async (error) => {
         try {
             const originalRequest = error.config
-            console.log('INTERCEPTOR ========    ',error.response.data)
             if (error.response.status === 401 && !originalRequest._retry) {
                 originalRequest._retry = true;
                 const tokens = await refresh();

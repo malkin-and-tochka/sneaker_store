@@ -1,13 +1,24 @@
-import {View, Text, StyleSheet, ScrollView} from "react-native";
+import {View, Text, StyleSheet, ScrollView, RefreshControl, SafeAreaView} from "react-native";
 import {useDispatch, useSelector} from "react-redux";
 import {getProductsSelector, setProducts} from "../../../redux/reducers/productsReducer";
-import {useEffect} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {getAllProducts} from "../../../api/productsApi";
 import FilterAndSorting from "./FilterAndSorting/FilterAndSorting";
 
 const HomeScreen = () => {
         const dispatch = useDispatch()
         const products = useSelector(getProductsSelector)
+        const [refreshing, setRefreshing] = useState(false);
+
+        const onRefresh = useCallback(() => {
+            setRefreshing(true);
+            (async () => {
+                const data = await getAllProducts()
+                if (data.length !== 0) dispatch(setProducts(data))
+                setRefreshing(false);
+            })()
+        }, []);
+
         useEffect(() => {
             (async () => {
                 const data = await getAllProducts()
@@ -19,9 +30,10 @@ const HomeScreen = () => {
             <View style={styles.container}>
                 <ScrollView showsVerticalScrollIndicator={false}
                             contentContainerStyle={styles.column}
-                            >
+                            refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh}/>}
+                >
+
                     <FilterAndSorting initialProducts={products}/>
-                    {/*<PaginatorView items={products}/>*/}
                 </ScrollView>
             </View>
         )
@@ -32,7 +44,9 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: "#E8EBEE",
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingLeft: '5%',
+        paddingRight: '5%'
     },
     row: {
         flex: 1,
@@ -41,7 +55,7 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
     },
     column: {
-        width: '80%',
+        width: '100%',
         rowGap: 25,
         backgroundColor: "#E8EBEE",
         gap: 25,

@@ -1,4 +1,3 @@
-import {useMemo} from "react";
 import {createSelector} from "reselect";
 import {IP_ADDRESS} from "../../constants";
 
@@ -9,7 +8,6 @@ const ADD_PRODUCT = 'ADD-PRODUCT'
 const initialState = {
     productsList: []
 }
-
 
 export const productsReducer = (state = initialState, action) => {
     switch (action.type) {

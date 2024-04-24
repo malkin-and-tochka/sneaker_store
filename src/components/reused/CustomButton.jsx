@@ -1,19 +1,18 @@
 import {Text, StyleSheet, TouchableOpacity} from "react-native";
 
-
 const CustomButton = ({propStyles, buttonText, fill, handle, disabled, textStyles, children}) => {
     return (
         <TouchableOpacity
-                            disabled={disabled}
-                            onPress={handle}
-                            style={[styles.button, {backgroundColor: fill ? '#100F14' : '#F5F5F5'},
-                                propStyles,
-                                disabled && {
-                                    backgroundColor: '#B3B4B6',
-                                    borderColor: '#B3B4B6'
-                                }]}>
+            disabled={disabled}
+            onPress={handle}
+            style={[styles.button, {backgroundColor: fill ? '#100F14' : '#F5F5F5'},
+                propStyles,
+                disabled && {
+                    backgroundColor: '#B3B4B6',
+                    borderColor: '#B3B4B6'
+                }]}>
             {children ? children :
-                <Text numberOfLines={1} style={[styles.text, {color: fill ? '#F5F5F5' : '#100F14'}, textStyles]}>{buttonText}</Text>}
+                <Text style={[styles.text, {color: fill ? '#F5F5F5' : '#100F14'}, textStyles]}>{buttonText}</Text>}
         </TouchableOpacity>
     );
 };

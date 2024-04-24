@@ -3,6 +3,7 @@ import {ScrollView, StyleSheet, Text, View} from "react-native";
 import InfoRow from "./InfoRow";
 import GoBackButton from "../../../../navigation/GoBackButton";
 import OrderProductItem from "./OrderProductItem";
+import {roundNumber} from "../../../../../helpFunctions/round";
 
 const UserOrderPage = (props) => {
     const {
@@ -47,7 +48,8 @@ const UserOrderPage = (props) => {
                     <InfoRow text={cardNumber} title={'Card number:'}/>
                     <InfoRow text={`${totalPrice}$`} title={'Price:'}/>
                     {discountCode && <InfoRow text={`${discountCode.discountPrice}$`} title={`Discount: ${discountCode.name}`}/>}
-                    <InfoRow text={discountCode.discountPrice ? `${totalPrice - discountCode.discountPrice}$` : `${totalPrice}`}
+                    <InfoRow text={`${shippingCost}$`} title={'Shipping cost:'}/>
+                    <InfoRow text={discountCode?.discountPrice ? `${roundNumber(totalPrice - discountCode.discountPrice + shippingCost)}$` : `${roundNumber(totalPrice + shippingCost)}$`}
                              title={'Final price'}/>
                 </View>
                 <View style={[styles.subContainer, styles.productsData]}>

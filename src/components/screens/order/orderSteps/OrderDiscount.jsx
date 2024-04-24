@@ -10,6 +10,7 @@ import {
     getTempDiscount,
     setOrderDiscountCode, setOrderDiscountCodeName
 } from "../../../../redux/reducers/tempOrderReducer";
+import InfoRow from "../../user/account/userOrders/InfoRow";
 
 const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
     const discountCode = useSelector(getTempDiscount)
@@ -41,10 +42,23 @@ const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
         }
     }
     const setOrderDiscountCodeHandler = async () => {
-        const res = await getDiscountByName(discountCode)
-        if (res.discountPrice) {
-            setDiscountCodeValue(res.discountPrice)
-            dispatch(setOrderDiscountCode(discountCode, discountCodeValue))
+        let valid = true
+        if (discountCode.length < 5 || discountCode.length > 12) {
+            valid = false
+            setIsValid(false)
+        }
+        if (!(/\d/.test(discountCode)) || !(/\D/.test(discountCode))) {
+            valid = false
+            setIsValid(false)
+        }
+        if (valid) {
+            const res = await getDiscountByName(discountCode)
+            if (res.discountPrice) {
+                setDiscountCodeValue(res.discountPrice)
+                dispatch(setOrderDiscountCode(discountCode, discountCodeValue))
+            }
+        } else {
+            setDiscountCode('')
         }
     }
     const combineHandlers = async () => {
@@ -54,8 +68,8 @@ const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
     return (
         <ScrollView showsVerticalScrollIndicator={false}
                     contentContainerStyle={{rowGap: 10, paddingBottom: 200, padding: 10}} alignItems='column'>
-            <FormElement validatorStyles={{color: isValid ? '#000' : 'red'}}
-                         validator={'At least 1 digit and 1 other character \nFrom 5 to 12'}
+            <FormElement validatorStyles={{color: isValid ? '#000' : 'red',minWidth: '50%'}}
+                         validator={'At least 1 digit and 1 other character. From 5 to 12'}
                          inputStyles={{borderColor: '#000', color: '#000'}}
                          placeholderColor='#000'
                          handle={(text) => setDiscountCode(text)}
@@ -71,7 +85,7 @@ const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
                         style={styles.discountWrongText}>This code is not exist</Text>}
                 </Text>
                 <CustomButton buttonText={'Check discount'} fill={true}
-                              propStyles={{backgroundColor: '#FDC467', borderWidth: 0, width: 160}}
+                              propStyles={{backgroundColor: '#FDC467',padding: 5 , borderWidth: 0, maxWidth: '50%'}}
                               textStyles={{color: '#000', fontSize: 20}} handle={checkTheDiscountCode}/>
             </View>
             <View style={styles.row}>
@@ -129,7 +143,8 @@ const styles = StyleSheet.create({
     },
     discountText: {
         fontSize: 18,
-        fontWeight: '500'
+        fontWeight: '500',
+        maxWidth: '45%'
     }
 })
 export default OrderDiscount;

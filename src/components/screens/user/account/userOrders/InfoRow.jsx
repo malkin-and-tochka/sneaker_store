@@ -6,7 +6,7 @@ const InfoRow = ({title, text}) => {
             <Text style={styles.rowText}>
                 {title}
             </Text>
-            <Text style={styles.rowSubText}>
+            <Text textBreakStrategy ='simple' style={styles.rowSubText}>
                 {text}
             </Text>
         </View>
@@ -17,15 +17,18 @@ const styles = StyleSheet.create({
     row: {
         flexDirection: "row",
         gap: 10,
-        justifyContent: "space-between",
+        overflowWrap: 'break-word',
+        justifyContent: 'space-between'
     },
     rowText: {
         fontSize: 18,
-        color: '#808080'
+        color: '#808080',
+        maxWidth: '25%'
     },
     rowSubText: {
         fontSize: 16,
-        alignSelf: "flex-end"
+        alignSelf: "flex-end",
+        maxWidth: '70%'
     }
 })
 export default InfoRow;

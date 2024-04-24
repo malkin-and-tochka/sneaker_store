@@ -19,7 +19,7 @@ const UserOrderScreen = (props) => {
         cardNumber,
         orderProductList,
     } = props.route.params
-    const orderProductsView = orderProductList.map(prod => <OrderProductItem key={`${prod.id}${prod.color}`} id={prod.id} color={prod.color} size={prod.size} name={prod.name} amount={prod.quantity} categoryName={prod.categoryName} price={prod.price} img={prod.imageResponseList[0].url}/>)
+    const orderProductsView = orderProductList.map(prod => <OrderProductItem key={`${prod.id}${prod.color}${prod.quantity}`} id={prod.id} color={prod.color} size={prod.size} name={prod.name} amount={prod.quantity} categoryName={prod.categoryName} price={prod.price} img={prod.imageResponseList[0].url}/>)
     return (
         <ScrollView showsVerticalScrollIndicator={false}
                     contentContainerStyle={{paddingBottom: 200, paddingTop: 20, alignItems: 'center', rowGap: 10}}

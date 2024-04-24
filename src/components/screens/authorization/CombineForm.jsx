@@ -1,8 +1,6 @@
-import {TextInput, View, StyleSheet, TouchableOpacity, Text, ScrollView} from "react-native";
-import {useEffect, useState} from "react";
-import FormButton from "./FormButton";
+import {View, StyleSheet, TouchableOpacity, Text, ScrollView} from "react-native";
+import {useState} from "react";
 import {login, register} from "../../../api/authApi";
-import {useNavigation} from "@react-navigation/native";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
 import GoBackButton from "../../navigation/GoBackButton";
@@ -12,7 +10,7 @@ const CombineForm = () => {
     return (
         <View style={styles.highWrapper}>
             <ScrollView showsVerticalScrollIndicator={false}
-                        alignItems='column'>
+                        alignItems='column' contentContainerStyle={{paddingBottom: 200}}>
                 <View style={styles.loginFormWrapper}>
                     <View style={styles.row}>
                         <TouchableOpacity

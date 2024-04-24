@@ -1,4 +1,4 @@
-export const searchProducts = (products, substring = '') => products.filter(product => product.name.includes(substring))
+export const searchProducts = (products, substring = '') => products.filter(product => (product.name).toLowerCase().includes(substring))
 export const sortByOrder = (products, ascending = true) => {
     if (ascending) return products.sort((a, b) => a.price - b.price)
     return products.sort((a, b) => b.price - a.price)

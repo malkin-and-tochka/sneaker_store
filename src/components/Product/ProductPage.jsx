@@ -8,17 +8,40 @@ import GoBackButton from "../navigation/GoBackButton";
 import {Ionicons} from '@expo/vector-icons';
 import {deleteFavorite, postFavorite} from "../../api/favoritesApi";
 import {addToFavorites, isProductInFavorites, removeFromFavorites} from "../../redux/reducers/favoritesReducer";
+import {getIsAuth} from "../../redux/reducers/authReducer";
+import {useNavigation} from "@react-navigation/native";
 
 const ProductPage = (props) => {
     const dispatch = useDispatch()
+    const isAuth = useSelector(getIsAuth)
+    const navigation = useNavigation()
     const {name, description, images, category, sizes, colors, id, price} = props.route.params
     const isProductInFavList = useSelector(isProductInFavorites(id))
     const [size, setSize] = useState(null)
     const [color, setColor] = useState(null)
+    const [showMessage, setShowMessage] = useState(false);
+    const showFeedback = () => {
+        setShowMessage(true);
+        setTimeout(() => {
+            setShowMessage(false);
+        }, 2000);
+    };
     const addProductToCart = () => dispatch(addToCart(props.route.params, color, size))
+    const combineHandler = () => {
+        if (isAuth) {
+            addProductToCart()
+            showFeedback()
+        } else {
+            navigation.navigate('CombineForm')
+        }
+    }
     const addToFavoritesHandler = async () => {
-        await postFavorite(id)
-        dispatch(addToFavorites({name, description, colors, imageResponseList: images, price, sizes, category, id}))
+        if (isAuth) {
+            await postFavorite(id)
+            dispatch(addToFavorites({name, description, colors, imageResponseList: images, price, sizes, category, id}))
+        } else {
+            navigation.navigate('CombineForm')
+        }
     }
     const removeFromFavoritesHandler = async () => {
         await deleteFavorite(id)
@@ -49,17 +72,21 @@ const ProductPage = (props) => {
             <View style={styles.row}>
                 <Text style={styles.textColors}>Choose color:</Text>
                 <View style={[styles.row, {gap: 10}]}>
+                    <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{columnGap: 5}}>
                     {colors.map(el => <Pressable key={el} style={[styles.circle, {
                         backgroundColor: `${el}`.toLowerCase(),
                         borderColor: el === color ? '#100F14' : '#E8EBEE',
                     }]} onPress={() => setColor(el)}/>)}
+                    </ScrollView>
                 </View>
             </View>
             <View style={styles.row}>
                 <Text style={styles.textColors}>Choose size:</Text>
                 <View style={[styles.row, {gap: 10}]}>
-                    {sizes.map(el => <Pressable onPress={() => setSize(el)} key={el}><Text
-                        style={[styles.textSize, el === size ? {backgroundColor: '#B3B4B6'} : {}]}>{el}</Text></Pressable>)}
+                    <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} contentContainerStyle={{columnGap: 5}}>
+                        {sizes.map(el => <Pressable onPress={() => setSize(el)} key={el}><Text
+                            style={[styles.textSize, el === size ? {backgroundColor: '#B3B4B6'} : {}]}>{el}</Text></Pressable>)}
+                    </ScrollView>
                 </View>
             </View>
             {size ? <Text style={styles.warning}/> :
@@ -70,8 +97,11 @@ const ProductPage = (props) => {
                 <Text style={styles.warning}>
                     Please, choose the color
                 </Text>}
-            <CustomButton disabled={!color || !size} handle={addProductToCart} fill={true} buttonText='Add to cart'
-                          propStyles={{height: 40}}/>
+            <View>
+                {showMessage && <Text style={styles.showText}>Product added to cart</Text>}
+                <CustomButton disabled={!color || !size || showMessage} handle={combineHandler} fill={true} buttonText='Add to cart'
+                              propStyles={{height: 40}}/>
+            </View>
         </ScrollView>
     );
 };
@@ -84,7 +114,8 @@ const styles = StyleSheet.create({
     },
     row: {
         flexDirection: "row",
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        flex: 1
     },
     description: {
         fontSize: 20
@@ -117,6 +148,13 @@ const styles = StyleSheet.create({
     name: {
         maxWidth: 200,
         fontSize: 25
+    },
+    showText: {
+        color: '#ABDD48',
+        fontSize: 20,
+        position: "absolute",
+        top: -30,
+        fontWeight: '500'
     }
 })
 

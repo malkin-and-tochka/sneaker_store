@@ -1,9 +1,10 @@
 import React from 'react';
 import {StyleSheet, Text, TextInput, View} from "react-native";
 
-const FormElement = ({title, handle, value, label, textStyles, inputStyles}) => {
+const FormElement = ({title, handle, value, label, textStyles, inputStyles, placeholderColor, validator, validatorStyles}) => {
     return (
         <View style={styles.wrapper}>
+            <Text style={[styles.validator, validatorStyles]}>{validator}</Text>
             <Text style={[styles.text, textStyles]}>
                 {title}
             </Text>
@@ -13,7 +14,7 @@ const FormElement = ({title, handle, value, label, textStyles, inputStyles}) => 
                 value={value}
                 onChangeText={handle}
                 style={[styles.input, inputStyles]}
-                placeholderTextColor={'#fff'}
+                placeholderTextColor={placeholderColor ? placeholderColor : '#fff'}
             />
         </View>
     );
@@ -41,5 +42,13 @@ const styles = StyleSheet.create({
         textAlign: "left",
         width: '90%'
     },
+    validator: {
+        position: "absolute",
+        right: 0,
+        top: 5,
+        fontWeight: '500',
+        maxWidth: '70%',
+        fontSize: 10
+    }
 });
 export default FormElement;

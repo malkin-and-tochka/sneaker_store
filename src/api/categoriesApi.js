@@ -1,9 +1,9 @@
-import AuthManager from "./axiosManagers/authManager";
+import apiManager from "./axiosManagers/apiManager";
 
 
 export const getCategories = async () => {
     try {
-        const res = await AuthManager.get('/categories')
+        const res = await apiManager.get('/categories')
         return res.data
     } catch (e) {
         console.log(e)

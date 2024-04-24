@@ -7,6 +7,7 @@ import {authReducer} from "./reducers/authReducer";
 import {categoryReducer} from "./reducers/categoriesReducer";
 import {favoritesReducer} from "./reducers/favoritesReducer";
 import {tempOrderReducer} from "./reducers/tempOrderReducer";
+import {userOrdersReducer} from "./reducers/userOrdersReducer";
 
 
 const reducer = combineReducers({
@@ -17,7 +18,8 @@ const reducer = combineReducers({
     auth: authReducer,
     categories: categoryReducer,
     favorites: favoritesReducer,
-    tempOrder: tempOrderReducer
+    tempOrder: tempOrderReducer,
+    userOrders: userOrdersReducer
 })
 
 export const store = createStore(reducer)

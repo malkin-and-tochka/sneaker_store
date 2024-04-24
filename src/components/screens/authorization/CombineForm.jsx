@@ -1,29 +1,37 @@
-import {TextInput, View, StyleSheet, TouchableOpacity, Text} from "react-native";
+import {TextInput, View, StyleSheet, TouchableOpacity, Text, ScrollView} from "react-native";
 import {useEffect, useState} from "react";
 import FormButton from "./FormButton";
 import {login, register} from "../../../api/authApi";
 import {useNavigation} from "@react-navigation/native";
 import LoginForm from "./LoginForm";
 import RegisterForm from "./RegisterForm";
+import GoBackButton from "../../navigation/GoBackButton";
 
 const CombineForm = () => {
     const [loginOrRegister, setLoginOrRegister] = useState('login')
-    // useEffect(() => {
-    //     get
-    // }, []);
     return (
         <View style={styles.highWrapper}>
-            <View style={styles.loginFormWrapper}>
-                <View style={styles.row}>
-                    <TouchableOpacity style={[styles.toggleButtons, loginOrRegister === 'login' ? styles.activeButton : {}]} onPress={() => setLoginOrRegister('login')}>
-                        <Text style={[styles.toggleButtonsText, loginOrRegister === 'login' ? styles.activeText : {}]}>Login</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity  style={[styles.toggleButtons, loginOrRegister === 'register' ? styles.activeButton : {}]} onPress={() => setLoginOrRegister('register')}>
-                        <Text style={[styles.toggleButtonsText, loginOrRegister === 'register' ? styles.activeText : {}]}>register</Text>
-                    </TouchableOpacity>
+            <ScrollView showsVerticalScrollIndicator={false}
+                        alignItems='column'>
+                <View style={styles.loginFormWrapper}>
+                    <View style={styles.row}>
+                        <TouchableOpacity
+                            style={[styles.toggleButtons, loginOrRegister === 'login' ? styles.activeButton : {}]}
+                            onPress={() => setLoginOrRegister('login')}>
+                            <Text
+                                style={[styles.toggleButtonsText, loginOrRegister === 'login' ? styles.activeText : {}]}>Login</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.toggleButtons, loginOrRegister === 'register' ? styles.activeButton : {}]}
+                            onPress={() => setLoginOrRegister('register')}>
+                            <Text
+                                style={[styles.toggleButtonsText, loginOrRegister === 'register' ? styles.activeText : {}]}>register</Text>
+                        </TouchableOpacity>
+                    </View>
+                    {loginOrRegister === 'login' ? <LoginForm/> : <RegisterForm/>}
                 </View>
-                {loginOrRegister === 'login' ? <LoginForm/> : <RegisterForm/>}
-            </View>
+                <GoBackButton/>
+            </ScrollView>
         </View>
     );
 };
@@ -34,12 +42,12 @@ const styles = StyleSheet.create(({
         alignItems: 'center',
         zIndex: 100,
         width: 300,
-        height: 400,
-        marginTop: 100,
+        marginTop: 50,
         backgroundColor: '#F5F5F5',
         borderRadius: 10,
         gap: 10,
-        paddingTop: 50
+        paddingTop: 50,
+        marginBottom: 20
     },
     highWrapper: {
         flex: 1,
@@ -72,7 +80,7 @@ const styles = StyleSheet.create(({
         borderRadius: 5,
         marginTop: 0,
         position: "absolute",
-        top: 10
+        top: 10,
     },
     toggleButtons: {
         width: '50%',

@@ -10,23 +10,35 @@ import {
     getTempAddress,
     getTempDiscount,
     getTempOrder,
-    setOrderDiscountCode
+    setOrderDiscountCode, setOrderDiscountCodeName
 } from "../../../../redux/reducers/tempOrderReducer";
 
 const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
-    const discountCodeRedux = useSelector(getTempDiscount)
-    const [discountCode, setDiscountCode] = useState(discountCodeRedux);
+    const discountCode = useSelector(getTempDiscount)
     const [discountCodeValue, setDiscountCodeValue] = useState('')
     const [successTry, setSuccessTry] = useState('')
+    const [isValid, setIsValid] = useState(true)
     const dispatch = useDispatch()
-
+    const setDiscountCode = (text) => dispatch(setOrderDiscountCodeName(text))
     const checkTheDiscountCode = async () => {
-        const res = await getDiscountByName(discountCode)
-        if (res) {
-            setDiscountCodeValue(res.discountPrice)
-            setSuccessTry('success')
-        } else {
-            setSuccessTry('wrong')
+        setIsValid(true)
+        let valid = true
+        if (discountCode.length < 5 || discountCode > 12) {
+            valid = false
+            setIsValid(false)
+        }
+        if (!(/\d/.test(discountCode)) || !(/\D/.test(discountCode))) {
+            valid = false
+            setIsValid(false)
+        }
+        if (valid) {
+            const res = await getDiscountByName(discountCode)
+            if (res) {
+                setDiscountCodeValue(res.discountPrice)
+                setSuccessTry('success')
+            } else {
+                setSuccessTry('wrong')
+            }
         }
     }
     const setOrderDiscountCodeHandler = () => {
@@ -41,8 +53,15 @@ const OrderDiscount = ({nextButtonHandler, prevButtonHandler}) => {
     return (
         <ScrollView showsVerticalScrollIndicator={false}
                     contentContainerStyle={{rowGap: 10, paddingBottom: 200, padding: 10}} alignItems='column'>
-            <FormElement handle={(text) => setDiscountCode(text)} value={discountCode}
-                         title={'Discount code'} label={'Discount code'}/>
+            <FormElement validatorStyles={{color: isValid ? '#000' : 'red'}}
+                         validator={'At least 1 digit and 1 other character \nFrom 5 to 12'}
+                         inputStyles={{borderColor: '#000', color: '#000'}}
+                         placeholderColor='#000'
+                         handle={(text) => setDiscountCode(text)}
+                         value={discountCode}
+                         title={'Discount code'}
+                         label={'Discount code'}
+            />
             <View style={styles.row}>
                 <Text style={styles.discountText}>
                     {successTry === 'success' && (<>Your discount is <Text
@@ -101,13 +120,14 @@ const styles = StyleSheet.create({
         width: '30%'
     },
     discountSuccessText: {
-        color: '#ABDD48'
+        color: '#ABDD48',
     },
     discountWrongText: {
-        color: '#E84929'
+        color: '#E84929',
+        fontSize: 18
     },
     discountText: {
-        fontSize: 20,
+        fontSize: 18,
         fontWeight: '500'
     }
 })

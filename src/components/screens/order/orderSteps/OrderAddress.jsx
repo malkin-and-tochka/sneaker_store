@@ -6,28 +6,33 @@ import CustomButton from "../../../reused/CustomButton";
 import NextStepButton from "./NextStepButton";
 import {
     getTempAddress,
-    getTempOrder,
-    setOrderAddress,
-    setOrderProductsList
+    setOrderAddress, setOrderAddressData, setOrderCustomerNotes, setOrderShipping,
 } from "../../../../redux/reducers/tempOrderReducer";
 import {useDispatch, useSelector} from "react-redux";
 
 const OrderAddress = ({nextButtonHandler}) => {
-    const AddressDate = useSelector(getTempAddress)
-    const [address, setAddress] = useState(AddressDate.address);
-    const [customerNotes, setCustomerNotes] = useState(AddressDate.customerNotes);
-    const [shippingType, setShippingType] = useState(AddressDate.shippingType);
+    const {address, shippingType, customerNotes} = useSelector(getTempAddress)
+    const setAddress = text => dispatch(setOrderAddress(text))
+    const setCustomerNotes = text => dispatch(setOrderCustomerNotes(text))
+    const setShippingType = value => dispatch(setOrderShipping(value))
+    const [isValid, setIsValid] = useState(true)
     const dispatch = useDispatch()
     const setOrderAddressHandler = () => {
-        dispatch(setOrderAddress(address, shippingType, customerNotes))
+        dispatch(setOrderAddressData(address, shippingType, customerNotes))
     }
     const combineHandlers = () => {
-        nextButtonHandler()
-        setOrderAddressHandler()
+        let validator = true
+        if (address.length < 10) validator = false
+        if (validator) {
+            setIsValid(true)
+            nextButtonHandler()
+            setOrderAddressHandler()
+        } else {
+            setIsValid(false)
+        }
     }
     return (
-        <ScrollView showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{rowGap: 10, paddingBottom: 200, padding: 10}} alignItems='column'>
+        <View style={styles.container}>
             <Text style={styles.inputsNames}>Shipping Type:</Text>
             <View style={[styles.row, {width: '70%', gap: 0}]}>
                 <CustomButton propStyles={styles.rowButtons} buttonText={'Pickup'}
@@ -36,25 +41,25 @@ const OrderAddress = ({nextButtonHandler}) => {
                               handle={() => setShippingType('DELIVERY_BY_COURIER ')}
                               fill={shippingType !== 'DELIVERY_BY_COURIER '}/>
             </View>
-            <FormElement handle={(text) => setAddress(text)} value={address}
-                         title={shippingType === 'SELF_PICK_UP' ? 'Your address' : 'Store address'} label={'Address'}/>
-            <FormElement handle={(text) => setCustomerNotes(text)} value={customerNotes}
+            <FormElement validatorStyles={{color: isValid ? '#000' : 'red'}} validator={'Size between 10 and 120'} inputStyles={{borderColor: '#000', color: '#000'}} placeholderColor='#000' handle={(text) => setAddress(text)} value={address}
+                         title={shippingType === 'SELF_PICK_UP' ? 'Store address' : 'Your address'} label={'Address'}/>
+            <FormElement inputStyles={{borderColor: '#000', color: '#000'}} placeholderColor='#000' handle={(text) => setCustomerNotes(text)} value={customerNotes}
                          title={'Customer Notes'} label={'Customer Notes'}/>
             <View style={styles.row}>
                 <GoBackButton/>
                 <NextStepButton handler={combineHandlers}/>
             </View>
-        </ScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        alignItems: "center",
         flexDirection: "column",
         flex: 1,
         padding: 10,
-        gap: 10
+        gap: 10,
+        borderRadius: 10
     },
     input: {
         width: '80%',

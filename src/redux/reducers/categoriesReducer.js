@@ -1,3 +1,5 @@
+import {IP_ADDRESS} from "../../constants";
+
 const ADD_CATEGORY = 'ADD_CATEGORY';
 const DELETE_CATEGORY = 'DELETE_CATEGORY';
 const SET_CATEGORIES = 'SET_CATEGORIES';
@@ -20,7 +22,7 @@ export const categoryReducer = (state = initialState, action) => {
             };
         case SET_CATEGORIES:
             const successImagesProducts = action.newCategories.map(el => {
-                el.imageResponseList.forEach(img => img.url = img.url.replace('localhost', '192.168.105.208'))
+                el.imageResponseList.forEach(img => img.url = img.url.replace('localhost', IP_ADDRESS))
                 return el
             })
             return {

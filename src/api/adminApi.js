@@ -62,15 +62,16 @@ export const deleteCategory = async (id) => {
         return res
     } catch (e) {
         console.log(e)
+        return e.response.data
     }
 }
 
 export const postDiscount = async (discountName, discountPrice) => {
     try {
         const res = await AuthManager.post('/admin/discountCode', {name: discountName, discountPrice})
-        console.log(res)
-        return res.data
+        return res.status
     } catch (e) {
-        console.log(e)
+        console.log(e.response.data)
+        return e.response.data
     }
 }

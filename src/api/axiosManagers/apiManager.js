@@ -1,8 +1,9 @@
 import axios from "axios";
+import {IP_ADDRESS} from "../../constants";
 
 
 const apiManager = axios.create({
-    baseURL: 'http://192.168.105.208:8080/sneakersShop/',
+    baseURL: `http://${IP_ADDRESS}:8080/sneakersShop/`,
     withCredentials: true,
     headers: {
         "response": "application/json"

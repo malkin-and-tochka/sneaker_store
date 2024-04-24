@@ -1,3 +1,5 @@
+import {IP_ADDRESS} from "../../constants";
+
 const SET_FAVORITES = 'SET_FAVORITES';
 const ADD_ITEM_TO_FAVORITES = 'ADD_ITEM_TO_FAVORITES';
 const REMOVE_ITEM_FROM_FAVORITES = 'REMOVE_ITEM_FROM_FAVORITES';
@@ -11,7 +13,7 @@ export const favoritesReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_FAVORITES:
             const successImagesProducts = action.newFavList.map(el => {
-                el.imageResponseList.forEach(img => img.url = img.url.replace('localhost', '192.168.105.208'))
+                el.imageResponseList.forEach(img => img.url = img.url.replace('localhost', IP_ADDRESS))
                 return el
             })
             return {...state, favList: successImagesProducts}

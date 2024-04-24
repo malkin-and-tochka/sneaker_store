@@ -3,7 +3,7 @@ import authManager from "./axiosManagers/authManager";
 
 export const getAllProducts = async () => {
     try {
-        const res =  await authManager.get('/products')
+        const res =  await apiManager.get('/products')
         return res.data
     } catch (e) {
         console.log(e)

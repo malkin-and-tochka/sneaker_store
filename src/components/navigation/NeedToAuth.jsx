@@ -7,7 +7,7 @@ import {getIsAuth} from "../../redux/reducers/authReducer";
 const NeedToAuth = () => {
     const navigation = useNavigation()
     const isAuth = useSelector(getIsAuth)
-    useEffect(()=>{
+    useEffect(() => {
         if (isAuth) {
             navigation.navigate('Home')
         }
@@ -16,7 +16,7 @@ const NeedToAuth = () => {
         <View style={styles.modalWindow}>
             <View style={styles.subWrapper}>
                 <Text style={styles.highTitle}>You need to log in</Text>
-                <Pressable onPress={()=> navigation.navigate('CombineForm')} style={styles.button}>
+                <Pressable onPress={() => navigation.navigate('CombineForm')} style={styles.button}>
                     <Text style={styles.title}>
                         Log in/sign in
                     </Text>

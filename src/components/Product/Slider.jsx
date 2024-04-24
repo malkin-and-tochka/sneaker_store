@@ -1,10 +1,8 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Image, StyleSheet, TouchableOpacity, View} from "react-native";
 import {useState} from "react";
-import shoos1 from "../../../assets/Adidas Iniki Runner_prime.jpg";
-import shoos2 from "../../../assets/Adidas Iniki Runner_2.jpg"
 
 import { AntDesign } from '@expo/vector-icons';
-const Slider = ({images = [shoos1, shoos2]}) => {
+const Slider = ({images}) => {
     const [slideIndex, setSlideIndex] = useState(0)
     const increment = () => {
         if (slideIndex + 1 === images.length) setSlideIndex(0)

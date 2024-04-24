@@ -13,7 +13,6 @@ const CategoriesList = () => {
     useEffect(() => {
         (async ()=>{
             const res = await getCategories()
-            // console.log('categories', res)
             if(res) dispatch(setCategories(res))
         })()
     }, []);

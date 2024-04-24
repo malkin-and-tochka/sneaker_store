@@ -4,6 +4,7 @@ import {
     selectProductsByCategory
 } from "../../../redux/reducers/productsReducer";
 import PaginatorView from "../home/Paginator/PaginatorView";
+import GoBackButton from "../../navigation/GoBackButton";
 
 const CategoryProductsScreen = (props) => {
         const category = props.route.params.category
@@ -13,6 +14,7 @@ const CategoryProductsScreen = (props) => {
                 <ScrollView showsVerticalScrollIndicator={false}
                             contentContainerStyle={{rowGap: 25, paddingBottom: 200, paddingTop: 50}} alignItems='column'
                             style={styles.column}>
+                    <GoBackButton/>
                     <PaginatorView items={products}/>
                 </ScrollView>
             </View>

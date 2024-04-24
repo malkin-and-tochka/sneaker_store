@@ -17,18 +17,29 @@ export const postOrder = async ({
                                     paymentDetailsRequest
                                 }) => {
     try {
-        const res = await authManager.post('/orders', {
-            orderProductRequestList,
-            discountCodeName,
-            address,
-            customerNotes,
-            shippingType,
-            paymentDetailsRequest
-        })
-        console.log(res.data)
-        return res.data
+        if (discountCodeName.length === 0) {
+            const res = await authManager.post('/orders', {
+                orderProductRequestList,
+                address,
+                customerNotes,
+                shippingType,
+                paymentDetailsRequest
+            })
+            return res.status
+        } else {
+            const res = await authManager.post('/orders', {
+                orderProductRequestList,
+                discountCodeName,
+                address,
+                customerNotes,
+                shippingType,
+                paymentDetailsRequest
+            })
+            return res.status
+        }
     } catch (e) {
-        console.log(e)
+        // console.log('requestSSS ', e.message)
+        console.log('requestSSS ', e.response.data)
     }
 }
 export const getOrderById = async (id) => {

@@ -1,17 +1,13 @@
 import {View, Text, StyleSheet, Image} from "react-native";
-import Counter from "./Counter";
-import {useDispatch} from "react-redux";
-import {removeFromCart} from "../../../../redux/reducers/cartReducer";
-import {FontAwesome6} from "@expo/vector-icons";
+import {IP_ADDRESS} from "../../../../../constants";
 
-const CartItem = ({img, name, price, amount, categoryName, id, color, size}) => {
-    const dispatch = useDispatch()
-    const removeFromCartHandler = () => dispatch(removeFromCart(id, color, size))
+const OrderProductItem = ({img, name, price, amount, categoryName, id, color, size}) => {
+    const validImg = img.replace('localhost', IP_ADDRESS)
     return (
         <View style={styles.column}>
             <View style={[styles.row, styles.bottomLine]}>
                 <View style={styles.imageWrapper}>
-                    <Image resizeMethod={'resize'} style={styles.img} source={{uri: img}}/>
+                    <Image resizeMethod={'resize'} style={styles.img} source={{uri: validImg}}/>
                 </View>
                 <View style={[styles.column, {maxWidth: '26%'}]}>
                     <Text style={[styles.text, {maxWidth: 140}]}>{name}</Text>
@@ -19,7 +15,6 @@ const CartItem = ({img, name, price, amount, categoryName, id, color, size}) => 
                 </View>
                 <View>
                     <Text style={styles.price}>{price}$</Text>
-                    <Counter amount={amount} color={color} size={size} productId={id}/>
                 </View>
             </View>
             <View style={[styles.row, styles.bottomLine]}>
@@ -30,7 +25,7 @@ const CartItem = ({img, name, price, amount, categoryName, id, color, size}) => 
                 <View style={styles.subRow}>
                     <Text style={styles.paramText}>Size: {size}</Text>
                 </View>
-                <FontAwesome6 onPress={removeFromCartHandler} name="trash" size={30} color="black"/>
+                <Text style={styles.amount}>Amount: {amount}</Text>
             </View>
         </View>
     );
@@ -85,7 +80,10 @@ const styles = StyleSheet.create({
     paramText: {
         fontSize: 20,
         fontWeight: '500'
+    },
+    amount: {
+        fontSize: 18
     }
 })
 
-export default CartItem;
+export default OrderProductItem;

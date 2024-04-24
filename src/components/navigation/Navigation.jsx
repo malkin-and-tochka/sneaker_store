@@ -15,47 +15,32 @@ import OrderScreen from "../screens/order/OrderScreen";
 import CategoriesList from "../screens/categories/CategoriesList";
 import FavoritesScreen from "../screens/favorites/FavoritesScreen";
 import CategoryProductsScreen from "../screens/categories/CategoryProductsScreen";
-import OrderAddress from "../screens/order/orderSteps/OrderAddress";
-import OrderDiscount from "../screens/order/orderSteps/OrderDiscount";
-import OrderPayment from "../screens/order/orderSteps/OrderPayment";
+import UserOrderScreen from "../screens/user/account/userOrders/UserOrderScreen";
+import {Text, TouchableOpacity} from "react-native";
+import Header from "../reused/Header";
 
 
 const Stack = createNativeStackNavigator()
 
 const Navigation = () => {
-    const dispatch = useDispatch()
     const isUserAuth = useSelector(getIsAuth)
-    console.log('user authorized:    ',isUserAuth)
-    useEffect(() => {
-        (async () => {
-            const checkOnAuth = await refresh()
-            if (checkOnAuth) {
-                dispatch(setAuth(true))
-            } else {
-                dispatch(setAuth(false))
-            }
-        })()
-    }, []);
     return (
         <NavigationContainer>
-            {isUserAuth && <NavigationRow/>}
-            {isUserAuth && <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={'Home'}>
+            <Header/>
+            <NavigationRow/>
+            <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName={'Home'}>
                 <Stack.Screen name="Home" component={HomeScreen}/>
-                <Stack.Screen name="Cart" component={CartScreen}/>
-                <Stack.Screen name="Account" component={AccountScreen}/>
+                <Stack.Screen name="Cart" component={isUserAuth ? CartScreen : CombineForm}/>
+                <Stack.Screen name="Account" component={isUserAuth ? AccountScreen : CombineForm}/>
                 <Stack.Screen name="productPage" component={ProductPage}/>
                 <Stack.Screen name="Admin" component={AdminPage}/>
                 <Stack.Screen name="CombineForm" component={CombineForm}/>
-                {/*<Stack.Screen name="NeedToAuth" component={NeedToAuth}/>*/}
                 <Stack.Screen name="Categories" component={CategoriesList}/>
-                <Stack.Screen name="Favorites" component={FavoritesScreen}/>
+                <Stack.Screen name="Favorites" component={isUserAuth ? FavoritesScreen : CombineForm}/>
                 <Stack.Screen name="CategoryScreen" component={CategoryProductsScreen}/>
                 <Stack.Screen name="OrderScreen" component={OrderScreen}/>
-                <Stack.Screen name="OrderAddress" component={OrderAddress}/>
-                <Stack.Screen name="OrderDiscount" component={OrderDiscount}/>
-                <Stack.Screen name="OrderPayment" component={OrderPayment}/>
-            </Stack.Navigator>}
-            {!isUserAuth && <CombineForm/>}
+                <Stack.Screen name="UserOrders" component={UserOrderScreen}/>
+            </Stack.Navigator>
         </NavigationContainer>
     );
 }

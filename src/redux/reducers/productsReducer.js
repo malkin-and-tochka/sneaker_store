@@ -1,5 +1,6 @@
 import {useMemo} from "react";
 import {createSelector} from "reselect";
+import {IP_ADDRESS} from "../../constants";
 
 const SET_PRODUCTS = 'SET-PRODUCTS'
 const DELETE_PRODUCTS = 'DELETE-PRODUCTS'
@@ -14,7 +15,7 @@ export const productsReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_PRODUCTS:
             const successImagesProducts = action.newState.map(el => {
-                el.imageResponseList.forEach(img => img.url = img.url.replace('localhost', '192.168.105.208'))
+                el.imageResponseList.forEach(img => img.url = img.url.replace('localhost', IP_ADDRESS))
                 return el
             })
             return {...state, productsList: successImagesProducts}

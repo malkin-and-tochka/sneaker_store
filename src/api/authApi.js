@@ -12,15 +12,17 @@ export const login = async ({username, password}) => {
         await SecureStore.setItemAsync('refreshToken', res.data.refreshToken)
         return res.status
     } catch (e) {
-        console.log('ERROR: ', e)
+        console.log('ERROR: ', e.response.data)
+        return e.response.data
     }
 }
 export const register = async ({email, firstName, lastName, password, confirmedPassword}) => {
     try {
         const res = await apiManager.post('/auth/register', {email, firstName, lastName, password, confirmedPassword})
-        return res
+        return res.status
     } catch (e) {
-        console.log('ERROR: ', e)
+        console.log('ERROR: ', e.response.data)
+        return e.response.data
     }
 }
 export const logout = async () => {
@@ -43,10 +45,15 @@ export const credentials = async (username, password) => {
 export const refresh = async () => {
     try {
         const refreshToken = await getRefreshToken()
-        const res = await axios({url:"http://192.168.105.208:8080/sneakersShop/auth/refresh" ,method: "POST", data: {"refreshToken":refreshToken}, withCredentials: true, headers: {"Content-Type": "application/json" }})
+        const res = await axios({
+            url: "http://192.168.105.208:8080/sneakersShop/auth/refresh",
+            method: "POST",
+            data: {"refreshToken": refreshToken},
+            withCredentials: true,
+            headers: {"Content-Type": "application/json"}
+        })
         return res.data
     } catch (e) {
         console.log('refresh error', e.response.status)
-        console.log('need to refresh refreshToken')
     }
 }

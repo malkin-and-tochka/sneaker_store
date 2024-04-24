@@ -7,45 +7,48 @@ import {AntDesign} from "@expo/vector-icons";
 import CustomButton from "../../../reused/CustomButton";
 import {useSelector} from "react-redux";
 import {getProductsSelector} from "../../../../redux/reducers/productsReducer";
+import GoBackButton from "../../../navigation/GoBackButton";
 
 const FilterAndSorting = ({initialProducts}) => {
     const prodRed = useSelector(getProductsSelector)
     useEffect(() => {
         setFilteredProducts(prodRed)
     }, [prodRed]);
-    const [filteredProducts, setFilteredProducts] = useState(initialProducts); // Отфильтрованный и отсортированный массив продуктов
-    // console.log(prodRed)
-    const [minPrice, setMinPrice] = useState();
-    const [maxPrice, setMaxPrice] = useState();
-    const [minSize, setMinSize] = useState();
-    const [maxSize, setMaxSize] = useState();
+    const [filteredProducts, setFilteredProducts] = useState(initialProducts);
+    const [minPrice, setMinPrice] = useState('');
+    const [maxPrice, setMaxPrice] = useState('');
+    const [minSize, setMinSize] = useState('');
+    const [maxSize, setMaxSize] = useState('');
     const [substring, setSubstring] = useState('');
     const [ascending, setAscending] = useState(true);
     const [showAdvancedSettings, setShowAdvancedSettings] = useState(false)
 
     const handleFilterAndSort = () => {
-        const filteredResult = filterProducts(filteredProducts, minPrice, maxPrice, minSize, maxSize)
-        const sortResult = sortByOrder(filteredResult, ascending)
-        setFilteredProducts(sortResult);
+        const filteredResult = filterProducts(prodRed, Number(minPrice), Number(maxPrice), Number(minSize), Number(maxSize))
+        const filteredSubstring = searchProducts(filteredResult, substring)
+        const sortResult = sortByOrder(filteredSubstring, ascending)
+        setFilteredProducts(sortResult)
     };
 
-    const searchProduct = (text) => {
-        setSubstring(text)
-        // console.log(text, prodRed)
-        setFilteredProducts(searchProducts(prodRed, substring))
+    const clearFilters = () => {
+        setAscending(true)
+        setMaxSize('')
+        setMinSize('')
+        setMaxPrice('')
+        setMinPrice('')
+        setSubstring('')
+        setFilteredProducts(prodRed)
     }
-
     return (
         <View>
             <View style={[styles.advancedSettings, showAdvancedSettings && styles.advancedSettingsVisible]}>
                 <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                     <TextInput
                         style={styles.searchInput}
-                        value={substring} onChangeText={searchProduct}
+                        value={substring} onChangeText={setSubstring}
                         placeholder={'Search...'}
                     />
                     <View style={{flexDirection: 'row'}}>
-                        <AntDesign name="search1" size={36} color="black"/>
                         {showAdvancedSettings ?
                             <AntDesign onPress={() => setShowAdvancedSettings(false)} name="caretup" size={36}
                                        color="black"/>
@@ -56,38 +59,52 @@ const FilterAndSorting = ({initialProducts}) => {
                     </View>
                 </View>
                 {showAdvancedSettings &&
-                    <View>
+                    <View style={styles.column}>
                         <View style={styles.row}>
-                            <Text>Price: </Text>
-                            <Text>from</Text>
-                            <TextInput style={styles.input} value={minPrice} onChangeText={setMinPrice}
-                                       keyboardType="numeric"/>
-                            <Text>to</Text>
-                            <TextInput style={styles.input} value={maxPrice} onChangeText={setMaxPrice}
-                                       keyboardType="numeric"/>
+                            <Text style={styles.text}>Price: </Text>
+                            <Text style={styles.text}>from</Text>
+                            <TextInput style={styles.input} value={minPrice.toString()} onChangeText={setMinPrice}
+                                       inputMode={"numeric"} keyboardType="numeric"/>
+                            <Text style={styles.text}>to</Text>
+                            <TextInput style={styles.input} value={maxPrice.toString()} onChangeText={setMaxPrice}
+                                       inputMode={"numeric"} keyboardType="numeric"/>
                         </View>
                         <View style={styles.row}>
-                            <Text>Sizes: </Text>
-                            <Text>from</Text>
-                            <TextInput style={styles.input} valvalue={minSize} onChangeText={setMinSize}
-                                       keyboardType="numeric"/>
-                            <Text>to</Text>
-                            <TextInput style={styles.input} value={maxSize} onChangeText={setMaxSize}
-                                       keyboardType="numeric"/>
+                            <Text style={styles.text}>Sizes: </Text>
+                            <Text style={styles.text}>from</Text>
+                            <TextInput style={styles.input} value={minSize.toString()} onChangeText={setMinSize}
+                                       inputMode={"numeric"} keyboardType="numeric"/>
+                            <Text style={styles.text}>to</Text>
+                            <TextInput style={styles.input} value={maxSize.toString()} onChangeText={setMaxSize}
+                                       inputMode={"numeric"} keyboardType="numeric"/>
                         </View>
                         <View style={styles.row}>
-                            <Text>Sort by: </Text>
-                            <CustomButton buttonText={'increasing'}/>
-                            <CustomButton buttonText={'decreasing'}/>
+                            <Text style={styles.text}>Sort by: </Text>
+                            <CustomButton propStyles={{padding: 5}} handle={() => setAscending(true)}
+                                          buttonText={'increasing'} fill={ascending}/>
+                            <CustomButton handle={() => setAscending(false)} buttonText={'decreasing'}
+                                          fill={!ascending}/>
                         </View>
-
-                        <Button title="Фильтровать и сортировать" onPress={handleFilterAndSort}/>
+                        <View style={styles.row}>
+                            <CustomButton propStyles={{
+                                backgroundColor: '#FDC467',
+                                borderWidth: 0,
+                                borderRadius: 15,
+                                width: '40%'
+                            }} buttonText={'Clear'} handle={clearFilters}/>
+                            <CustomButton propStyles={{
+                                backgroundColor: '#ABDD48',
+                                borderWidth: 0,
+                                borderRadius: 15,
+                                width: '40%'
+                            }} buttonText={'Search'} handle={handleFilterAndSort}/>
+                        </View>
                     </View>}
             </View>
             <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
                 <PageSizeSelector/>
             </View>
-            {filteredProducts.length !== 0 && <PaginatorView items={filteredProducts}/>}
+            {filteredProducts.length === 0 ? <Text>Empty</Text> : <PaginatorView items={filteredProducts}/>}
         </View>
     );
 }
@@ -100,14 +117,16 @@ const styles = StyleSheet.create({
         padding: 5,
         paddingLeft: 20,
         paddingRight: 5,
-        backgroundColor: '#fff'
+        backgroundColor: '#fff',
+        gap: 5,
+        marginBottom: 20
     },
     advancedSettingsVisible: {
         borderRadius: 20,
     },
     searchInput: {
-        backgroundColor: '#0f0',
-        width: '70%'
+        width: '80%',
+        borderBottomWidth: 1
     },
     row: {
         flexDirection: "row",
@@ -116,7 +135,15 @@ const styles = StyleSheet.create({
     },
     input: {
         borderWidth: 2,
-        borderRadius: 5
+        borderRadius: 5,
+        padding: 5
+    },
+    text: {
+        fontSize: 20
+    },
+    column: {
+        flexDirection: 'column',
+        gap: 10
     }
 })
 

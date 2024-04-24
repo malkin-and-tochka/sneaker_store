@@ -1,4 +1,4 @@
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useDispatch, useSelector} from 'react-redux';
 import {useCallback, useEffect, useState} from "react";
 import {
@@ -13,6 +13,7 @@ import CustomButton from "../../../reused/CustomButton";
 import {useNavigation} from "@react-navigation/native";
 import {getOrders} from "../../../../api/orderApi";
 import FormElement from "../admin/FormElement";
+import UserOrdersList from "./userOrders/UserOrdersList";
 
 const AccountScreen = () => {
     useEffect(() => {
@@ -21,8 +22,6 @@ const AccountScreen = () => {
             const roles = await getAccountRoles()
             if (data) dispatch(setAllAccountInfo(data))
             if (roles) dispatch(setRoles(roles))
-            const res = await getOrders()
-            console.log(res)
         })();
 
     }, []);
@@ -76,8 +75,6 @@ const AccountScreen = () => {
                                      label={'Your first name'}/>
                         <FormElement textStyles={styles.text} handle={text => handleLastNameChange(text)} value={newInfo.lastName} title={'Your last name'}
                                      label={'Your last name'}/>
-                        <FormElement textStyles={styles.text} handle={text => handleEmailChange(text)} value={newInfo.email} title={'Your email'}
-                                     label={'Your email'}/>
                         <FormElement textStyles={styles.text} handle={text => handleMobilePhoneChange(text)} value={newInfo.mobilePhone} title={'Your mobile phone'}
                                      label={'Your mobile phone'}/>
                         <CustomButton handle={handleSave} buttonText={"Save"} fill={true} propStyles={{height: 40}}/>
@@ -93,6 +90,11 @@ const AccountScreen = () => {
                 )}
                 {isAdmin && <CustomButton buttonText={'Admin page'} fill={true} handle={()=>navigation.navigate('Admin')}/>}
             </View>
+            <ScrollView showsVerticalScrollIndicator={false}
+                contentContainerStyle={{rowGap: 25, paddingBottom: 200, paddingTop: 50}} alignItems='column'>
+                <Text style={styles.title}>{accountInfo.firstName} orders:</Text>
+                <UserOrdersList/>
+            </ScrollView>
         </View>
     );
 };
@@ -123,6 +125,10 @@ const styles = StyleSheet.create({
         textAlign: "left",
         width: '90%'
     },
+    title: {
+        fontSize: 24,
+        marginLeft: '5%'
+    }
 })
 
 export default AccountScreen

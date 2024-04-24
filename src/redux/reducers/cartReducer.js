@@ -3,6 +3,7 @@ const REMOVE_FROM_CART = 'REMOVE_FROM_CART';
 const CHANGE_PRODUCT_AMOUNT = 'CHANGE_PRODUCT_AMOUNT';
 const INCREMENT_AMOUNT = 'INCREMENT_AMOUNT';
 const DECREMENT_AMOUNT = 'DECREMENT_AMOUNT';
+const RESET_CART_ITEMS = 'RESET_CART_ITEMS'
 
 const initialState = {
     cartList: [],
@@ -64,6 +65,9 @@ export const cartReducer = (state = initialState, action) => {
             });
             return {...state, cartList: newCartList, totalPrice: newTotalPrice};
         }
+        case RESET_CART_ITEMS: {
+            return {...state, cartList: [], totalPrice: 0};
+        }
         default:
             return state;
     }
@@ -80,8 +84,9 @@ export const changeProductAmount = (productId, amount, color, size) => ({
 });
 
 export const incrementAmount = (productId, color, size) => ({type: INCREMENT_AMOUNT, productId, color, size});
-
 export const decrementAmount = (productId, color, size) => ({type: DECREMENT_AMOUNT, productId, color, size});
+export const resetCart = () => ({type: RESET_CART_ITEMS})
+
 export const getCartList = (state) => state.cart.cartList;
 export const getTotalPrice = (state) => state.cart.totalPrice;
 export const isProductInCart = (productId, color, size) => state => state.cart.cartList.some((item) => item.product.id === productId && item.color === color && item.size === size)

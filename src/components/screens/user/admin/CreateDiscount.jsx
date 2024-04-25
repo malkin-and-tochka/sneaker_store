@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
         width: '100%'
     },
     rowButtons: {
-        width: '45%'
+        minWidth: '45%'
     },
     error: {
         fontSize: 20,

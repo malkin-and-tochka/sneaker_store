@@ -224,7 +224,7 @@ const styles = StyleSheet.create({
         width: 70
     },
     rowButtons: {
-        width: '45%'
+        minWidth: '45%'
     },
     error: {
         fontSize: 16,

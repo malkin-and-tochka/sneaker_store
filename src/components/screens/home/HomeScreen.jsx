@@ -4,6 +4,8 @@ import {getProductsSelector, setProducts} from "../../../redux/reducers/products
 import {useCallback, useEffect, useState} from "react";
 import {getAllProducts} from "../../../api/productsApi";
 import FilterAndSorting from "./FilterAndSorting/FilterAndSorting";
+import {getCategories} from "../../../api/categoriesApi";
+import {setCategories} from "../../../redux/reducers/categoriesReducer";
 
 const HomeScreen = () => {
         const dispatch = useDispatch()
@@ -15,6 +17,8 @@ const HomeScreen = () => {
             (async () => {
                 const data = await getAllProducts()
                 if (data.length !== 0) dispatch(setProducts(data))
+                const res = await getCategories()
+                if(res) dispatch(setCategories(res))
                 setRefreshing(false);
             })()
         }, []);

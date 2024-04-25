@@ -4,6 +4,8 @@ import {RefreshControl, ScrollView} from "react-native";
 import {useCallback, useEffect, useState} from "react";
 import {getCategories} from "../../../api/categoriesApi";
 import CategoryDescription from "./CategoryDescription";
+import {getAllProducts} from "../../../api/productsApi";
+import {setProducts} from "../../../redux/reducers/productsReducer";
 
 const CategoriesList = () => {
     const dispatch = useDispatch()
@@ -11,6 +13,8 @@ const CategoriesList = () => {
     const onRefresh = useCallback(() => {
         setRefreshing(true);
         (async () => {
+            const data = await getAllProducts()
+            if (data.length !== 0) dispatch(setProducts(data))
             const res = await getCategories()
             if(res) dispatch(setCategories(res))
             setRefreshing(false);

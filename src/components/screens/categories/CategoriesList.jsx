@@ -6,6 +6,7 @@ import {getCategories} from "../../../api/categoriesApi";
 import CategoryDescription from "./CategoryDescription";
 import {getAllProducts} from "../../../api/productsApi";
 import {setProducts} from "../../../redux/reducers/productsReducer";
+import {setPageSize} from "../../../redux/reducers/paginatorReducer";
 
 const CategoriesList = () => {
     const dispatch = useDispatch()
@@ -17,6 +18,7 @@ const CategoriesList = () => {
             if (data.length !== 0) dispatch(setProducts(data))
             const res = await getCategories()
             if(res) dispatch(setCategories(res))
+            dispatch(setPageSize(1))
             setRefreshing(false);
         })()
     }
@@ -24,6 +26,7 @@ const CategoriesList = () => {
         (async ()=>{
             const res = await getCategories()
             if(res) dispatch(setCategories(res))
+            dispatch(setPageSize(1))
         })()
     }, []);
     const categoriesList = useSelector(getAllCategories)

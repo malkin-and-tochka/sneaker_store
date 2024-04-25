@@ -10,7 +10,7 @@ import {setProducts} from "../../../redux/reducers/productsReducer";
 const CategoriesList = () => {
     const dispatch = useDispatch()
     const [refreshing, setRefreshing] = useState(false);
-    const onRefresh = useCallback(() => {
+    const onRefresh = () => {
         setRefreshing(true);
         (async () => {
             const data = await getAllProducts()
@@ -19,7 +19,7 @@ const CategoriesList = () => {
             if(res) dispatch(setCategories(res))
             setRefreshing(false);
         })()
-    }, []);
+    }
     useEffect(() => {
         (async ()=>{
             const res = await getCategories()

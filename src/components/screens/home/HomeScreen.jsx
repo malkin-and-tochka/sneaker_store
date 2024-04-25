@@ -12,7 +12,7 @@ const HomeScreen = () => {
         const products = useSelector(getProductsSelector)
         const [refreshing, setRefreshing] = useState(false);
 
-        const onRefresh = useCallback(() => {
+        const onRefresh = () => {
             setRefreshing(true);
             (async () => {
                 const data = await getAllProducts()
@@ -21,7 +21,7 @@ const HomeScreen = () => {
                 if(res) dispatch(setCategories(res))
                 setRefreshing(false);
             })()
-        }, []);
+        }
 
         useEffect(() => {
             (async () => {
